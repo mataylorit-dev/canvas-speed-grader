@@ -1,0 +1,26 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Users collection - only authenticated users can read/write their own data
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Payments collection - users can read their own payments, only functions can write
+    match /payments/{userId}/{paymentId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if false; // Only Cloud Functions can write payments
+    }
+
+    // Subscriptions collection
+    match /subscriptions/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if false; // Only Cloud Functions can manage subscriptions
+    }
+
+    // Grading history - users can read/write their own grading history
+    match /grading_history/{userId}/{historyId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}

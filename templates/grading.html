@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Grade assignments with AI assistance - Canvas Speed Grader">
+  <title>Grade Assignments - Canvas Speed Grader</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/design-system.css">
+  <link rel="stylesheet" href="css/main.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Sidebar (same as dashboard) -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="/dashboard" class="navbar-brand">
+          <div class="navbar-brand-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"></path>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            </svg>
+          </div>
+          <span>SpeedGrader</span>
+        </a>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Main</div>
+          <a href="/dashboard" class="sidebar-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            Dashboard
+          </a>
+          <a href="/grading" class="sidebar-link active">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"></path>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            </svg>
+            Grade Assignments
+          </a>
+          <a href="/history" class="sidebar-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            Grading History
+          </a>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="flex items-center gap-3 p-2 w-full rounded-lg transition hover:bg-gray-100" onclick="window.location.href='/settings'">
+          <div class="avatar" id="userAvatar">T</div>
+          <div class="flex-1 text-left">
+            <div class="text-sm font-medium" id="userName">Teacher</div>
+            <div class="text-xs text-muted">View settings</div>
+          </div>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-with-sidebar">
+      <!-- Page Header -->
+      <div class="page-header">
+        <div class="container">
+          <div class="page-header-content">
+            <div>
+              <nav class="flex items-center gap-2 text-sm mb-2">
+                <a href="/dashboard" class="text-muted hover:text-primary">Dashboard</a>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-muted">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+                <span class="text-primary font-medium">Grade Assignment</span>
+              </nav>
+              <h1 class="page-title" id="assignmentTitle">Select an Assignment</h1>
+              <p class="page-description" id="assignmentDescription">Choose an assignment to start AI-powered grading</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <button class="btn btn-secondary" id="exportBtn" disabled onclick="exportGrades()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Export CSV
+              </button>
+              <button class="btn btn-success" id="postGradesBtn" disabled onclick="postGrades()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Post to Canvas
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <div class="container">
+          <!-- Assignment Selection (shown when no assignment selected) -->
+          <div id="assignmentSelector" class="card mb-6">
+            <div class="card-header">
+              <h2 class="card-title">Select Assignment</h2>
+              <p class="card-description">Choose an assignment with a rubric to grade</p>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label for="assignmentSelect" class="form-label">Assignment</label>
+                <select id="assignmentSelect" class="form-input form-select">
+                  <option value="">Loading assignments...</option>
+                </select>
+              </div>
+
+              <!-- Filter Options -->
+              <div class="flex flex-wrap gap-4 mt-4">
+                <label class="form-checkbox">
+                  <input type="checkbox" name="filter_ontime" checked>
+                  <span class="form-checkbox-label">On Time</span>
+                </label>
+                <label class="form-checkbox">
+                  <input type="checkbox" name="filter_late" checked>
+                  <span class="form-checkbox-label">Late</span>
+                </label>
+                <label class="form-checkbox">
+                  <input type="checkbox" name="filter_resubmitted">
+                  <span class="form-checkbox-label">Resubmitted</span>
+                </label>
+                <label class="form-checkbox">
+                  <input type="checkbox" name="filter_missing">
+                  <span class="form-checkbox-label">Missing</span>
+                </label>
+              </div>
+
+              <button class="btn btn-primary btn-lg mt-6" id="startGradingBtn" onclick="startGrading()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                </svg>
+                Start AI Grading
+              </button>
+            </div>
+          </div>
+
+          <!-- Grading Progress (shown during grading) -->
+          <div id="gradingProgress" class="card mb-6 hidden">
+            <div class="card-body">
+              <div class="flex items-center gap-4 mb-4">
+                <div class="spinner"></div>
+                <div>
+                  <h3 class="font-semibold text-lg" id="progressTitle">Grading in progress...</h3>
+                  <p class="text-muted text-sm" id="progressSubtitle">Processing submissions with AI</p>
+                </div>
+              </div>
+              <div class="progress progress-lg mb-2">
+                <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-muted" id="progressCount">0 / 0 submissions</span>
+                <span class="text-muted" id="progressPercent">0%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Grading Interface (shown after grading complete) -->
+          <div id="gradingInterface" class="grading-layout hidden">
+            <!-- Submissions Sidebar -->
+            <div class="grading-sidebar">
+              <div class="submission-list">
+                <div class="submission-list-header">
+                  <div class="submission-list-title">Submissions</div>
+                  <div class="submission-list-count" id="submissionCount">0 students</div>
+                </div>
+                <div class="submission-list-items" id="submissionList">
+                  <!-- Submissions will be inserted here -->
+                </div>
+              </div>
+
+              <!-- Summary Card -->
+              <div class="card mt-4">
+                <div class="card-body">
+                  <h4 class="font-semibold mb-3">Grading Summary</h4>
+                  <div class="flex justify-between text-sm mb-2">
+                    <span class="text-muted">Average Score</span>
+                    <span class="font-medium" id="avgScore">--</span>
+                  </div>
+                  <div class="flex justify-between text-sm mb-2">
+                    <span class="text-muted">Highest Score</span>
+                    <span class="font-medium" id="highScore">--</span>
+                  </div>
+                  <div class="flex justify-between text-sm">
+                    <span class="text-muted">Lowest Score</span>
+                    <span class="font-medium" id="lowScore">--</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Grading Panel -->
+            <div class="grading-main">
+              <!-- Student Info -->
+              <div class="grading-panel">
+                <div class="grading-panel-header">
+                  <div>
+                    <div class="grading-panel-title" id="studentName">Select a submission</div>
+                    <div class="grading-panel-subtitle" id="submissionStatus">--</div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <button class="btn btn-icon btn-secondary" id="prevStudent" onclick="previousStudent()" disabled>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                      </svg>
+                    </button>
+                    <button class="btn btn-icon btn-secondary" id="nextStudent" onclick="nextStudent()" disabled>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="grading-panel-body">
+                  <!-- Fairness Alert (if applicable) -->
+                  <div id="fairnessAlert" class="alert alert-warning mb-4 hidden">
+                    <svg class="alert-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                      <line x1="12" y1="9" x2="12" y2="13"></line>
+                      <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    <div class="alert-content">
+                      <p class="alert-title">Fairness Review Flag</p>
+                      <p class="alert-description" id="fairnessMessage">The AI reviewer flagged this grade for manual review.</p>
+                    </div>
+                  </div>
+
+                  <!-- Rubric Criteria -->
+                  <div class="rubric-list" id="rubricList">
+                    <div class="text-center py-8 text-muted">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-4 opacity-50">
+                        <path d="M12 20h9"></path>
+                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                      </svg>
+                      <p>Select a submission to view and edit grades</p>
+                    </div>
+                  </div>
+
+                  <!-- Total Score -->
+                  <div class="grading-total" id="totalScore" style="display: none;">
+                    <div class="grading-total-label">Total Score</div>
+                    <div class="grading-total-score">
+                      <span id="totalPoints">0</span> / <span id="maxPoints">0</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- General Feedback -->
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">General Feedback</h3>
+                  <p class="card-description">Additional comments for the student</p>
+                </div>
+                <div class="card-body">
+                  <textarea id="generalFeedback" class="form-input" rows="4" placeholder="Add any additional feedback for the student..."></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Post Grades Modal -->
+  <div class="modal-backdrop" id="postModalBackdrop">
+    <div class="modal" id="postModal">
+      <div class="modal-header">
+        <h3 class="modal-title">Post Grades to Canvas</h3>
+        <button class="modal-close" onclick="closePostModal()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-info mb-4">
+          <svg class="alert-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+          <div class="alert-content">
+            <p class="alert-description">Grades will be posted with an AI disclosure notice in the comments.</p>
+          </div>
+        </div>
+        <p class="text-sm text-secondary mb-4">You are about to post <strong id="postCount">0</strong> grades to Canvas. This action cannot be undone.</p>
+        <label class="form-checkbox">
+          <input type="checkbox" id="confirmPost">
+          <span class="form-checkbox-label">I have reviewed the grades and confirm they are ready to post</span>
+        </label>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closePostModal()">Cancel</button>
+        <button class="btn btn-success" id="confirmPostBtn" disabled onclick="confirmPostGrades()">
+          <span id="postBtnText">Post Grades</span>
+          <div id="postSpinner" class="spinner spinner-sm hidden"></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+  <!-- App Scripts -->
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/grading.js"></script>
+
+  <script>
+    // State
+    let currentAssignment = null;
+    let submissions = [];
+    let currentSubmissionIndex = -1;
+    let grades = {};
+
+    // Check authentication
+    firebase.auth().onAuthStateChanged(async (user) => {
+      if (!user) {
+        window.location.href = '/login';
+        return;
+      }
+
+      document.getElementById('userName').textContent = user.displayName || 'Teacher';
+      document.getElementById('userAvatar').textContent = (user.displayName || user.email)[0].toUpperCase();
+
+      // Load assignments
+      loadAssignments();
+
+      // Check for assignment in URL
+      const params = new URLSearchParams(window.location.search);
+      const assignmentId = params.get('assignment');
+      if (assignmentId) {
+        setTimeout(() => {
+          document.getElementById('assignmentSelect').value = assignmentId;
+        }, 1000);
+      }
+    });
+
+    // Load assignments
+    async function loadAssignments() {
+      try {
+        const response = await API.getAssignments();
+        const select = document.getElementById('assignmentSelect');
+
+        if (response.assignments && response.assignments.length > 0) {
+          select.innerHTML = '<option value="">Select an assignment...</option>' +
+            response.assignments.map(a => `<option value="${a.id}">${a.name} (${a.submission_count} submissions)</option>`).join('');
+        } else {
+          select.innerHTML = '<option value="">No assignments with rubrics found</option>';
+        }
+      } catch (error) {
+        console.error('Failed to load assignments:', error);
+        showToast('Failed to load assignments', 'error');
+      }
+    }
+
+    // Start grading
+    async function startGrading() {
+      const assignmentId = document.getElementById('assignmentSelect').value;
+      if (!assignmentId) {
+        showToast('Please select an assignment', 'error');
+        return;
+      }
+
+      // Get filters
+      const filters = {
+        ontime: document.querySelector('[name="filter_ontime"]').checked,
+        late: document.querySelector('[name="filter_late"]').checked,
+        resubmitted: document.querySelector('[name="filter_resubmitted"]').checked,
+        missing: document.querySelector('[name="filter_missing"]').checked
+      };
+
+      // Show progress
+      document.getElementById('assignmentSelector').classList.add('hidden');
+      document.getElementById('gradingProgress').classList.remove('hidden');
+
+      try {
+        // Start grading process
+        const result = await API.gradeAssignment(assignmentId, filters, (progress) => {
+          updateProgress(progress);
+        });
+
+        // Store results
+        currentAssignment = result.assignment;
+        submissions = result.submissions;
+        grades = result.grades;
+
+        // Update UI
+        document.getElementById('assignmentTitle').textContent = currentAssignment.name;
+        document.getElementById('assignmentDescription').textContent = `${submissions.length} submissions graded`;
+
+        // Show grading interface
+        document.getElementById('gradingProgress').classList.add('hidden');
+        document.getElementById('gradingInterface').classList.remove('hidden');
+
+        // Enable buttons
+        document.getElementById('exportBtn').disabled = false;
+        document.getElementById('postGradesBtn').disabled = false;
+
+        // Populate submission list
+        renderSubmissionList();
+
+        // Calculate summary stats
+        updateSummaryStats();
+
+        // Select first submission
+        if (submissions.length > 0) {
+          selectSubmission(0);
+        }
+
+      } catch (error) {
+        console.error('Grading failed:', error);
+        showToast('Grading failed: ' + error.message, 'error');
+        document.getElementById('gradingProgress').classList.add('hidden');
+        document.getElementById('assignmentSelector').classList.remove('hidden');
+      }
+    }
+
+    // Update progress bar
+    function updateProgress(progress) {
+      const percent = Math.round((progress.current / progress.total) * 100);
+      document.getElementById('progressBar').style.width = `${percent}%`;
+      document.getElementById('progressCount').textContent = `${progress.current} / ${progress.total} submissions`;
+      document.getElementById('progressPercent').textContent = `${percent}%`;
+      if (progress.currentStudent) {
+        document.getElementById('progressSubtitle').textContent = `Grading: ${progress.currentStudent}`;
+      }
+    }
+
+    // Render submission list
+    function renderSubmissionList() {
+      const container = document.getElementById('submissionList');
+      document.getElementById('submissionCount').textContent = `${submissions.length} students`;
+
+      container.innerHTML = submissions.map((sub, index) => {
+        const grade = grades[sub.id];
+        const totalScore = grade ? grade.total : 0;
+        const maxScore = currentAssignment.points_possible;
+
+        return `
+          <div class="submission-item ${index === currentSubmissionIndex ? 'active' : ''}" onclick="selectSubmission(${index})">
+            <div class="submission-avatar">${sub.anonymous_id.slice(-3)}</div>
+            <div class="submission-info">
+              <div class="submission-name">${sub.anonymous_id}</div>
+              <div class="submission-status-text">${sub.status}</div>
+            </div>
+            <div class="submission-score">${totalScore}/${maxScore}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Select submission
+    function selectSubmission(index) {
+      currentSubmissionIndex = index;
+      const submission = submissions[index];
+      const grade = grades[submission.id];
+
+      // Update submission list active state
+      document.querySelectorAll('.submission-item').forEach((el, i) => {
+        el.classList.toggle('active', i === index);
+      });
+
+      // Update student info
+      document.getElementById('studentName').textContent = submission.anonymous_id;
+      document.getElementById('submissionStatus').textContent = `Status: ${submission.status}`;
+
+      // Update nav buttons
+      document.getElementById('prevStudent').disabled = index === 0;
+      document.getElementById('nextStudent').disabled = index === submissions.length - 1;
+
+      // Show fairness alert if flagged
+      const fairnessAlert = document.getElementById('fairnessAlert');
+      if (grade && grade.fairness_flag) {
+        fairnessAlert.classList.remove('hidden');
+        document.getElementById('fairnessMessage').textContent = grade.fairness_message || 'The AI reviewer flagged this grade for manual review.';
+      } else {
+        fairnessAlert.classList.add('hidden');
+      }
+
+      // Render rubric
+      renderRubric(grade);
+
+      // Update general feedback
+      document.getElementById('generalFeedback').value = grade ? grade.general_feedback || '' : '';
+
+      // Show total score
+      document.getElementById('totalScore').style.display = 'flex';
+      updateTotalScore();
+    }
+
+    // Render rubric
+    function renderRubric(grade) {
+      if (!currentAssignment || !currentAssignment.rubric) return;
+
+      const container = document.getElementById('rubricList');
+      container.innerHTML = currentAssignment.rubric.map((criterion, i) => {
+        const criterionGrade = grade && grade.criteria ? grade.criteria[criterion.id] : null;
+        const score = criterionGrade ? criterionGrade.score : 0;
+        const feedback = criterionGrade ? criterionGrade.feedback : '';
+
+        return `
+          <div class="rubric-item" data-criterion-id="${criterion.id}">
+            <div class="rubric-item-header">
+              <div class="rubric-item-title">${criterion.description}</div>
+              <div class="rubric-item-points">
+                <input type="number" class="rubric-item-score" value="${score}" min="0" max="${criterion.points}"
+                       onchange="updateCriterionScore('${criterion.id}', this.value)">
+                <span class="rubric-item-max">/ ${criterion.points}</span>
+              </div>
+            </div>
+            <textarea class="rubric-item-feedback" placeholder="Feedback for this criterion..."
+                      onchange="updateCriterionFeedback('${criterion.id}', this.value)">${feedback}</textarea>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('maxPoints').textContent = currentAssignment.points_possible;
+    }
+
+    // Update criterion score
+    function updateCriterionScore(criterionId, value) {
+      const submission = submissions[currentSubmissionIndex];
+      if (!grades[submission.id]) {
+        grades[submission.id] = { criteria: {}, total: 0 };
+      }
+      if (!grades[submission.id].criteria[criterionId]) {
+        grades[submission.id].criteria[criterionId] = {};
+      }
+      grades[submission.id].criteria[criterionId].score = parseFloat(value) || 0;
+      updateTotalScore();
+      renderSubmissionList();
+    }
+
+    // Update criterion feedback
+    function updateCriterionFeedback(criterionId, value) {
+      const submission = submissions[currentSubmissionIndex];
+      if (!grades[submission.id].criteria[criterionId]) {
+        grades[submission.id].criteria[criterionId] = {};
+      }
+      grades[submission.id].criteria[criterionId].feedback = value;
+    }
+
+    // Update total score
+    function updateTotalScore() {
+      const submission = submissions[currentSubmissionIndex];
+      const grade = grades[submission.id];
+      if (!grade || !grade.criteria) return;
+
+      let total = 0;
+      Object.values(grade.criteria).forEach(c => {
+        total += parseFloat(c.score) || 0;
+      });
+
+      grade.total = total;
+      document.getElementById('totalPoints').textContent = total;
+    }
+
+    // Update summary stats
+    function updateSummaryStats() {
+      const scores = Object.values(grades).map(g => g.total || 0);
+      if (scores.length === 0) return;
+
+      const avg = (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1);
+      const high = Math.max(...scores);
+      const low = Math.min(...scores);
+
+      document.getElementById('avgScore').textContent = `${avg} / ${currentAssignment.points_possible}`;
+      document.getElementById('highScore').textContent = `${high} / ${currentAssignment.points_possible}`;
+      document.getElementById('lowScore').textContent = `${low} / ${currentAssignment.points_possible}`;
+    }
+
+    // Navigation
+    function previousStudent() {
+      if (currentSubmissionIndex > 0) {
+        selectSubmission(currentSubmissionIndex - 1);
+      }
+    }
+
+    function nextStudent() {
+      if (currentSubmissionIndex < submissions.length - 1) {
+        selectSubmission(currentSubmissionIndex + 1);
+      }
+    }
+
+    // Export grades
+    function exportGrades() {
+      // Create CSV content
+      let csv = 'Student ID,Total Score,Status\n';
+      submissions.forEach(sub => {
+        const grade = grades[sub.id];
+        csv += `${sub.anonymous_id},${grade ? grade.total : 0},${sub.status}\n`;
+      });
+
+      // Download
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `grades_${currentAssignment.name.replace(/[^a-z0-9]/gi, '_')}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+
+      showToast('Grades exported successfully', 'success');
+    }
+
+    // Post grades modal
+    function postGrades() {
+      document.getElementById('postCount').textContent = submissions.length;
+      document.getElementById('postModalBackdrop').classList.add('active');
+      document.getElementById('postModal').classList.add('active');
+    }
+
+    function closePostModal() {
+      document.getElementById('postModalBackdrop').classList.remove('active');
+      document.getElementById('postModal').classList.remove('active');
+      document.getElementById('confirmPost').checked = false;
+      document.getElementById('confirmPostBtn').disabled = true;
+    }
+
+    // Enable confirm button when checkbox is checked
+    document.getElementById('confirmPost').addEventListener('change', function() {
+      document.getElementById('confirmPostBtn').disabled = !this.checked;
+    });
+
+    // Confirm post grades
+    async function confirmPostGrades() {
+      const btn = document.getElementById('confirmPostBtn');
+      const btnText = document.getElementById('postBtnText');
+      const spinner = document.getElementById('postSpinner');
+
+      btn.disabled = true;
+      btnText.textContent = 'Posting...';
+      spinner.classList.remove('hidden');
+
+      try {
+        await API.postGrades(currentAssignment.id, grades);
+        closePostModal();
+        showToast('Grades posted successfully to Canvas!', 'success');
+      } catch (error) {
+        showToast('Failed to post grades: ' + error.message, 'error');
+      } finally {
+        btn.disabled = false;
+        btnText.textContent = 'Post Grades';
+        spinner.classList.add('hidden');
+      }
+    }
+
+    // Toast notification
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerHTML = `
+        <svg class="toast-icon" style="color: var(--color-${type === 'error' ? 'error' : type === 'success' ? 'success' : 'info'})" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          ${type === 'success' ? '<circle cx="12" cy="12" r="10"></circle><polyline points="9 11 12 14 22 4"></polyline>' : '<circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line>'}
+        </svg>
+        <div class="toast-content">
+          <p class="toast-message">${message}</p>
+        </div>
+        <button class="toast-close" onclick="this.parentElement.remove()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 5000);
+    }
+  </script>
+</body>
+</html>

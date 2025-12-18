@@ -1,0 +1,33 @@
+# Canvas Speed Grader - API Dependencies
+
+# Web Framework
+flask>=3.0.0
+flask-cors>=4.0.0
+gunicorn>=21.0.0
+
+# Firebase
+firebase-admin>=6.3.0
+
+# Canvas LMS
+canvasapi>=3.2.0
+
+# AI/LLM
+openai>=1.0.0
+google-generativeai>=0.3.0
+
+# Document Processing
+PyPDF2>=3.0.0
+python-docx>=1.0.0
+pytesseract>=0.3.10
+pdf2image>=1.16.0
+Pillow>=10.0.0
+
+# Payments
+stripe>=7.0.0
+
+# Utilities
+requests>=2.31.0
+python-dotenv>=1.0.0
+
+# Firebase Functions
+functions-framework>=3.0.0

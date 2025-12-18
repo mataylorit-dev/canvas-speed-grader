@@ -1,0 +1,39 @@
+# Render Blueprint - Deploy both frontend and backend
+services:
+  # Backend API
+  - type: web
+    name: speedgrade-api
+    runtime: python
+    rootDir: api
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn main:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11"
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_PRICE_SINGLE
+        sync: false
+      - key: ALLOWED_ORIGINS
+        sync: false
+    healthCheckPath: /api/health
+
+  # Frontend Static Site
+  - type: web
+    name: speedgrade-web
+    runtime: static
+    rootDir: static
+    buildCommand: echo "No build needed"
+    staticPublishPath: .
+    routes:
+      - type: rewrite
+        source: /api/*
+        destination: https://speedgrade-api.onrender.com/api/*
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: public, max-age=0, must-revalidate

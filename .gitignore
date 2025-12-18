@@ -1,0 +1,42 @@
+# Environment variables (contains secrets)
+.env
+*.env
+.env.*
+!.env.example
+
+# Firebase
+.firebase/
+firebase-debug.log
+firebase-debug.*.log
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+ENV/
+.venv/
+
+# Service account keys (never commit these)
+*service-account*.json
+*serviceAccount*.json
+*.pem
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node (if any)
+node_modules/
+
+# Logs
+*.log
+logs/

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Create your Canvas Speed Grader account - AI-powered grading assistant">
+  <title>Create Account - Canvas Speed Grader</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/design-system.css">
+  <link rel="stylesheet" href="css/main.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+</head>
+<body>
+  <div class="auth-layout">
+    <div class="auth-container animate-scale-in" style="max-width: 520px;">
+      <div class="auth-card">
+        <div class="auth-header">
+          <div class="auth-logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"></path>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            </svg>
+          </div>
+          <h1 class="auth-title">Create Your Account</h1>
+          <p class="auth-subtitle">Start grading smarter in just a few minutes</p>
+        </div>
+
+        <div class="auth-body">
+          <!-- Google Sign Up -->
+          <button type="button" class="btn-google" id="googleSignUp">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            </svg>
+            Continue with Google
+          </button>
+
+          <div class="auth-divider">or create with email</div>
+
+          <!-- Registration Form -->
+          <form id="registerForm">
+            <!-- Step Indicator -->
+            <div class="flex justify-center gap-2 mb-6">
+              <div class="step-dot active" id="step1Dot"></div>
+              <div class="step-dot" id="step2Dot"></div>
+            </div>
+            <style>
+              .step-dot {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background-color: var(--color-gray-300);
+                transition: all var(--transition-fast);
+              }
+              .step-dot.active {
+                background-color: var(--color-primary);
+                width: 32px;
+                border-radius: 5px;
+              }
+            </style>
+
+            <!-- Step 1: Account Details -->
+            <div id="step1">
+              <div class="form-group">
+                <label for="email" class="form-label form-label-required">Email Address</label>
+                <div class="input-group">
+                  <span class="input-group-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                      <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                  </span>
+                  <input type="email" id="email" name="email" class="form-input" placeholder="you@school.edu" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="password" class="form-label form-label-required">Password</label>
+                <div class="input-group">
+                  <span class="input-group-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                  </span>
+                  <input type="password" id="password" name="password" class="form-input" placeholder="At least 8 characters" required minlength="8">
+                </div>
+                <p class="form-hint">Must contain uppercase, lowercase, and a number</p>
+              </div>
+
+              <div class="form-group">
+                <label for="confirmPassword" class="form-label form-label-required">Confirm Password</label>
+                <div class="input-group">
+                  <span class="input-group-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                  </span>
+                  <input type="password" id="confirmPassword" name="confirmPassword" class="form-input" placeholder="Confirm your password" required>
+                </div>
+              </div>
+
+              <button type="button" class="btn btn-primary btn-lg w-full" id="nextStep">
+                Continue
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Step 2: Canvas Integration -->
+            <div id="step2" class="hidden">
+              <div class="alert alert-info mb-6">
+                <svg class="alert-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="16" x2="12" y2="12"></line>
+                  <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                <div class="alert-content">
+                  <p class="alert-description">You'll need your Canvas API token. Find it in Canvas under Account > Settings > Approved Integrations.</p>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="canvasUrl" class="form-label form-label-required">Canvas URL</label>
+                <div class="input-group">
+                  <span class="input-group-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="2" y1="12" x2="22" y2="12"></line>
+                      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                    </svg>
+                  </span>
+                  <input type="url" id="canvasUrl" name="canvasUrl" class="form-input" placeholder="https://yourschool.instructure.com" required>
+                </div>
+                <p class="form-hint">Your school's Canvas URL</p>
+              </div>
+
+              <div class="form-group">
+                <label for="canvasToken" class="form-label form-label-required">Canvas API Token</label>
+                <div class="input-group">
+                  <span class="input-group-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                  </span>
+                  <input type="password" id="canvasToken" name="canvasToken" class="form-input" placeholder="Your Canvas API token" required>
+                </div>
+                <p class="form-hint">Your token is encrypted and stored securely</p>
+              </div>
+
+              <div class="form-group">
+                <label for="courseId" class="form-label form-label-required">Course ID</label>
+                <div class="input-group">
+                  <span class="input-group-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                    </svg>
+                  </span>
+                  <input type="text" id="courseId" name="courseId" class="form-input" placeholder="123456" required>
+                </div>
+                <p class="form-hint">Found in your Canvas course URL</p>
+              </div>
+
+              <label class="form-checkbox mb-6">
+                <input type="checkbox" name="terms" required>
+                <span class="form-checkbox-label">I agree to the <a href="/terms" target="_blank">Terms of Service</a> and <a href="/privacy" target="_blank">Privacy Policy</a></span>
+              </label>
+
+              <!-- Error Alert -->
+              <div id="errorAlert" class="alert alert-error mb-4 hidden">
+                <svg class="alert-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="12"></line>
+                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <div class="alert-content">
+                  <p class="alert-description" id="errorMessage"></p>
+                </div>
+              </div>
+
+              <div class="flex gap-3">
+                <button type="button" class="btn btn-secondary" id="prevStep">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                  </svg>
+                  Back
+                </button>
+                <button type="submit" class="btn btn-primary btn-lg flex-1" id="registerButton">
+                  <span id="registerButtonText">Create Account</span>
+                  <div id="registerSpinner" class="spinner spinner-sm hidden"></div>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="auth-footer">
+          Already have an account? <a href="/login">Sign in</a>
+        </div>
+      </div>
+
+      <!-- Back to Home Link -->
+      <div style="text-align: center; margin-top: var(--space-6);">
+        <a href="/" style="color: rgba(255,255,255,0.7); font-size: var(--font-size-sm); display: inline-flex; align-items: center; gap: var(--space-2);">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          Back to Home
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+  <!-- App Scripts -->
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+
+  <script>
+    // Form navigation
+    const step1 = document.getElementById('step1');
+    const step2 = document.getElementById('step2');
+    const step1Dot = document.getElementById('step1Dot');
+    const step2Dot = document.getElementById('step2Dot');
+    const nextBtn = document.getElementById('nextStep');
+    const prevBtn = document.getElementById('prevStep');
+
+    // Validate password
+    function validatePassword(password) {
+      const hasUppercase = /[A-Z]/.test(password);
+      const hasLowercase = /[a-z]/.test(password);
+      const hasNumber = /[0-9]/.test(password);
+      const hasMinLength = password.length >= 8;
+      return hasUppercase && hasLowercase && hasNumber && hasMinLength;
+    }
+
+    // Move to step 2
+    nextBtn.addEventListener('click', () => {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      // Validate email
+      if (!email || !email.includes('@')) {
+        showError('Please enter a valid email address');
+        return;
+      }
+
+      // Validate password
+      if (!validatePassword(password)) {
+        showError('Password must be at least 8 characters with uppercase, lowercase, and a number');
+        return;
+      }
+
+      // Confirm passwords match
+      if (password !== confirmPassword) {
+        showError('Passwords do not match');
+        return;
+      }
+
+      // Show step 2
+      step1.classList.add('hidden');
+      step2.classList.remove('hidden');
+      step1Dot.classList.remove('active');
+      step2Dot.classList.add('active');
+    });
+
+    // Back to step 1
+    prevBtn.addEventListener('click', () => {
+      step2.classList.add('hidden');
+      step1.classList.remove('hidden');
+      step2Dot.classList.remove('active');
+      step1Dot.classList.add('active');
+    });
+
+    // Show error helper
+    function showError(message) {
+      const errorAlert = document.getElementById('errorAlert');
+      const errorMessage = document.getElementById('errorMessage');
+      errorMessage.textContent = message;
+      errorAlert.classList.remove('hidden');
+      setTimeout(() => errorAlert.classList.add('hidden'), 5000);
+    }
+
+    // Registration form handler
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const canvasUrl = document.getElementById('canvasUrl').value;
+      const canvasToken = document.getElementById('canvasToken').value;
+      const courseId = document.getElementById('courseId').value;
+
+      const button = document.getElementById('registerButton');
+      const buttonText = document.getElementById('registerButtonText');
+      const spinner = document.getElementById('registerSpinner');
+
+      // Show loading state
+      button.disabled = true;
+      buttonText.textContent = 'Creating account...';
+      spinner.classList.remove('hidden');
+
+      try {
+        // Create account with Firebase
+        await Auth.createAccount(email, password, {
+          canvasUrl,
+          canvasToken,
+          courseId
+        });
+
+        // Redirect to dashboard on success
+        window.location.href = '/dashboard';
+      } catch (error) {
+        showError(error.message || 'Failed to create account. Please try again.');
+      } finally {
+        button.disabled = false;
+        buttonText.textContent = 'Create Account';
+        spinner.classList.add('hidden');
+      }
+    });
+
+    // Google Sign Up handler
+    document.getElementById('googleSignUp').addEventListener('click', async () => {
+      try {
+        const result = await Auth.signInWithGoogle();
+        // For Google users, redirect to Canvas setup if needed
+        if (result.isNewUser) {
+          window.location.href = '/setup';
+        } else {
+          window.location.href = '/dashboard';
+        }
+      } catch (error) {
+        showError(error.message || 'Failed to sign up with Google. Please try again.');
+      }
+    });
+  </script>
+</body>
+</html>
