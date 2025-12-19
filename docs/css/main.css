@@ -1113,7 +1113,20 @@
    -------------------------------------------------------------------------- */
 .pricing-section {
   padding: var(--space-24) 0;
-  background: linear-gradient(135deg, var(--color-gray-50) 0%, var(--bg-primary) 100%);
+  background: linear-gradient(180deg, #0f172a 0%, #1e1b4b 100%);
+}
+
+.pricing-section .section-badge {
+  color: #c4b5fd;
+  background-color: rgba(139, 92, 246, 0.2);
+}
+
+.pricing-section .section-title {
+  color: #ffffff;
+}
+
+.pricing-section .section-description {
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .pricing-grid {
@@ -1132,21 +1145,22 @@
 
 .pricing-card {
   position: relative;
-  background-color: var(--bg-primary);
-  border: 2px solid var(--color-gray-200);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-2xl);
   padding: var(--space-8);
   transition: all var(--transition-base);
 }
 
 .pricing-card:hover {
-  border-color: var(--color-primary-200);
-  box-shadow: var(--shadow-lg);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
 .pricing-card.featured {
   border-color: var(--color-primary);
-  box-shadow: var(--shadow-xl), 0 0 40px rgb(79 70 229 / 0.15);
+  box-shadow: 0 20px 40px rgba(79, 70, 229, 0.3);
 }
 
 .pricing-card.featured::before {
@@ -1167,13 +1181,13 @@
   text-align: center;
   margin-bottom: var(--space-6);
   padding-bottom: var(--space-6);
-  border-bottom: 1px solid var(--color-gray-100);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .pricing-name {
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
-  color: var(--text-primary);
+  color: #ffffff;
   margin-bottom: var(--space-2);
 }
 
@@ -1187,17 +1201,17 @@
 .pricing-amount {
   font-size: var(--font-size-4xl);
   font-weight: var(--font-weight-bold);
-  color: var(--text-primary);
+  color: #ffffff;
 }
 
 .pricing-period {
   font-size: var(--font-size-sm);
-  color: var(--text-muted);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .pricing-description {
   font-size: var(--font-size-sm);
-  color: var(--text-tertiary);
+  color: rgba(255, 255, 255, 0.6);
   margin-top: var(--space-2);
 }
 
@@ -1222,7 +1236,7 @@
 
 .pricing-feature-text {
   font-size: var(--font-size-sm);
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.8);
 }
 
 /* --------------------------------------------------------------------------
