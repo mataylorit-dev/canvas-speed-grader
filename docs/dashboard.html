@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Canvas Speed Grader Dashboard - Manage your grading">
+  <title>Dashboard - Canvas Speed Grader</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="./css/design-system.css">
+  <link rel="stylesheet" href="./css/main.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="./images/favicon.svg">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="dashboard.html" class="navbar-brand">
+          <div class="navbar-brand-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"></path>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            </svg>
+          </div>
+          <span>SpeedGrader</span>
+        </a>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Main</div>
+          <a href="dashboard.html" class="sidebar-link active">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            Dashboard
+          </a>
+          <a href="grading.html" class="sidebar-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"></path>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            </svg>
+            Grade Assignments
+          </a>
+          <a href="history.html" class="sidebar-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            Grading History
+          </a>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Settings</div>
+          <a href="settings.html" class="sidebar-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+            Settings
+          </a>
+          <a href="settings.html#courses" class="sidebar-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+            Courses
+          </a>
+          <a href="settings.html#billing" class="sidebar-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+              <line x1="1" y1="10" x2="23" y2="10"></line>
+            </svg>
+            Billing
+          </a>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="dropdown" id="userDropdown">
+          <button class="flex items-center gap-3 p-2 w-full rounded-lg transition hover:bg-gray-100" onclick="toggleDropdown()">
+            <div class="avatar" id="userAvatar">T</div>
+            <div class="flex-1 text-left">
+              <div class="text-sm font-medium" id="userName">Teacher Name</div>
+              <div class="text-xs text-muted" id="userEmail">teacher@school.edu</div>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="dropdown-menu">
+            <a href="settings.html" class="dropdown-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              Account Settings
+            </a>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" onclick="signOut()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+              </svg>
+              Sign Out
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-with-sidebar">
+      <!-- Top Bar -->
+      <div class="page-header">
+        <div class="container">
+          <div class="page-header-content">
+            <div>
+              <h1 class="page-title">Dashboard</h1>
+              <p class="page-description">Welcome back! Here's an overview of your grading.</p>
+            </div>
+            <a href="grading.html" class="btn btn-primary">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              Start Grading
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <div class="container">
+          <!-- Stats Grid -->
+          <div class="dashboard-grid mb-8">
+            <div class="stat-card">
+              <div class="stat-card-header">
+                <div class="stat-card-icon stat-card-icon-primary">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-card-value" id="totalSubmissions">0</div>
+              <div class="stat-card-label">Total Submissions</div>
+              <div class="stat-card-trend stat-card-trend-up">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                  <polyline points="17 6 23 6 23 12"></polyline>
+                </svg>
+                +12% this week
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card-header">
+                <div class="stat-card-icon stat-card-icon-success">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 11 12 14 22 4"></polyline>
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-card-value" id="gradedCount">0</div>
+              <div class="stat-card-label">Graded</div>
+              <div class="stat-card-trend stat-card-trend-up">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                  <polyline points="17 6 23 6 23 12"></polyline>
+                </svg>
+                +8% this week
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card-header">
+                <div class="stat-card-icon stat-card-icon-warning">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-card-value" id="pendingCount">0</div>
+              <div class="stat-card-label">Pending</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card-header">
+                <div class="stat-card-icon stat-card-icon-error">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                  </svg>
+                </div>
+              </div>
+              <div class="stat-card-value" id="lateCount">0</div>
+              <div class="stat-card-label">Late Submissions</div>
+            </div>
+          </div>
+
+          <!-- Main Content Grid -->
+          <div class="grid md:grid-cols-3 gap-6">
+            <!-- Assignments Section -->
+            <div class="md:col-span-2">
+              <div class="card">
+                <div class="card-header flex items-center justify-between">
+                  <div>
+                    <h2 class="card-title">Recent Assignments</h2>
+                    <p class="card-description">Select an assignment to start grading</p>
+                  </div>
+                  <button class="btn btn-secondary btn-sm" onclick="refreshAssignments()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="23 4 23 10 17 10"></polyline>
+                      <polyline points="1 20 1 14 7 14"></polyline>
+                      <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                    </svg>
+                    Refresh
+                  </button>
+                </div>
+                <div class="card-body p-0">
+                  <div class="assignment-list p-4" id="assignmentList">
+                    <!-- Loading state -->
+                    <div class="text-center py-8" id="assignmentsLoading">
+                      <div class="spinner mx-auto mb-4"></div>
+                      <p class="text-muted">Loading assignments...</p>
+                    </div>
+
+                    <!-- Empty state (hidden by default) -->
+                    <div class="empty-state hidden" id="assignmentsEmpty">
+                      <div class="empty-state-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                          <polyline points="14 2 14 8 20 8"></polyline>
+                        </svg>
+                      </div>
+                      <h3 class="empty-state-title">No assignments found</h3>
+                      <p class="empty-state-description">We couldn't find any assignments with rubrics. Make sure your assignments have rubrics attached in Canvas.</p>
+                    </div>
+
+                    <!-- Assignments will be inserted here -->
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Actions & Info -->
+            <div class="space-y-6">
+              <!-- Course Info Card -->
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Current Course</h3>
+                </div>
+                <div class="card-body">
+                  <div class="course-card active">
+                    <div class="course-card-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                      </svg>
+                    </div>
+                    <div class="course-card-content">
+                      <div class="course-card-name" id="courseName">Loading...</div>
+                      <div class="course-card-id" id="courseId">Course ID: ---</div>
+                    </div>
+                  </div>
+                  <a href="settings.html#courses" class="btn btn-ghost btn-sm w-full mt-4">
+                    Switch Course
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+
+              <!-- AI Status Card -->
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">AI Grading Status</h3>
+                </div>
+                <div class="card-body">
+                  <div class="ai-grading-indicator">
+                    <div class="ai-grading-indicator-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                      </svg>
+                    </div>
+                    <div class="ai-grading-indicator-text">
+                      <div class="ai-grading-indicator-title">Ready to Grade</div>
+                      <div class="ai-grading-indicator-subtitle">AI models are operational</div>
+                    </div>
+                    <div class="status-dot status-dot-success"></div>
+                  </div>
+
+                  <div class="divider"></div>
+
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-muted">OpenAI Status</span>
+                    <span class="badge badge-success">Online</span>
+                  </div>
+                  <div class="flex items-center justify-between text-sm mt-2">
+                    <span class="text-muted">Gemini Status</span>
+                    <span class="badge badge-success">Online</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Subscription Card -->
+              <div class="card" id="subscriptionCard">
+                <div class="card-header">
+                  <h3 class="card-title">Subscription</h3>
+                </div>
+                <div class="card-body">
+                  <div class="flex items-center justify-between mb-4">
+                    <div>
+                      <div class="font-semibold" id="planName">Free Trial</div>
+                      <div class="text-sm text-muted" id="planStatus">14 days remaining</div>
+                    </div>
+                    <span class="badge badge-primary" id="planBadge">Trial</span>
+                  </div>
+                  <a href="settings.html#billing" class="btn btn-primary btn-sm w-full">
+                    Upgrade Plan
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+  <!-- App Scripts -->
+  <script src="./js/firebase-config.js"></script>
+  <script src="./js/auth.js"></script>
+  <script src="./js/api.js"></script>
+  <script src="./js/app.js"></script>
+
+  <script>
+    // Check authentication
+    firebase.auth().onAuthStateChanged(async (user) => {
+      if (!user) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      // Update user info in sidebar
+      document.getElementById('userName').textContent = user.displayName || 'Teacher';
+      document.getElementById('userEmail').textContent = user.email;
+      document.getElementById('userAvatar').textContent = (user.displayName || user.email)[0].toUpperCase();
+
+      // Load dashboard data
+      loadDashboardData();
+    });
+
+    // Load dashboard data
+    async function loadDashboardData() {
+      try {
+        // Fetch assignments
+        const response = await API.getAssignments();
+        displayAssignments(response.assignments);
+
+        // Update stats
+        document.getElementById('totalSubmissions').textContent = response.totalSubmissions || 0;
+        document.getElementById('gradedCount').textContent = response.gradedCount || 0;
+        document.getElementById('pendingCount').textContent = response.pendingCount || 0;
+        document.getElementById('lateCount').textContent = response.lateCount || 0;
+
+        // Update course info
+        if (response.course) {
+          document.getElementById('courseName').textContent = response.course.name;
+          document.getElementById('courseId').textContent = `Course ID: ${response.course.id}`;
+        }
+      } catch (error) {
+        console.error('Failed to load dashboard:', error);
+        showToast('Failed to load dashboard data', 'error');
+      }
+    }
+
+    // Display assignments
+    function displayAssignments(assignments) {
+      const container = document.getElementById('assignmentList');
+      const loading = document.getElementById('assignmentsLoading');
+      const empty = document.getElementById('assignmentsEmpty');
+
+      loading.classList.add('hidden');
+
+      if (!assignments || assignments.length === 0) {
+        empty.classList.remove('hidden');
+        return;
+      }
+
+      const html = assignments.map(assignment => `
+        <div class="assignment-card" onclick="selectAssignment('${assignment.id}')">
+          <div class="assignment-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+          </div>
+          <div class="assignment-content">
+            <div class="assignment-name">${assignment.name}</div>
+            <div class="assignment-meta">
+              <span class="assignment-meta-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                Due: ${formatDate(assignment.due_at)}
+              </span>
+              <span class="assignment-meta-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                </svg>
+                ${assignment.submission_count} submissions
+              </span>
+            </div>
+          </div>
+          <div class="assignment-stats">
+            <div class="assignment-stat">
+              <div class="assignment-stat-value">${assignment.points_possible}</div>
+              <div class="assignment-stat-label">Points</div>
+            </div>
+          </div>
+          <div class="assignment-arrow">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </div>
+        </div>
+      `).join('');
+
+      container.innerHTML = html;
+    }
+
+    // Select assignment for grading
+    function selectAssignment(assignmentId) {
+      window.location.href = `/grading?assignment=${assignmentId}`;
+    }
+
+    // Refresh assignments
+    function refreshAssignments() {
+      const loading = document.getElementById('assignmentsLoading');
+      loading.classList.remove('hidden');
+      loadDashboardData();
+    }
+
+    // Format date helper
+    function formatDate(dateString) {
+      if (!dateString) return 'No due date';
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+    }
+
+    // Toggle user dropdown
+    function toggleDropdown() {
+      document.getElementById('userDropdown').classList.toggle('open');
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      const dropdown = document.getElementById('userDropdown');
+      if (!dropdown.contains(e.target)) {
+        dropdown.classList.remove('open');
+      }
+    });
+
+    // Sign out
+    async function signOut() {
+      await firebase.auth().signOut();
+      window.location.href = 'login.html';
+    }
+
+    // Show toast notification
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerHTML = `
+        <svg class="toast-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          ${type === 'error' ? '<circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line>' : '<circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>'}
+        </svg>
+        <div class="toast-content">
+          <p class="toast-message">${message}</p>
+        </div>
+        <button class="toast-close" onclick="this.parentElement.remove()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 5000);
+    }
+  </script>
+
+  <style>
+    .space-y-6 > * + * {
+      margin-top: var(--space-6);
+    }
+    .md\:col-span-2 {
+      grid-column: span 2;
+    }
+    @media (max-width: 768px) {
+      .md\:col-span-2 {
+        grid-column: span 1;
+      }
+      .md\:grid-cols-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</body>
+</html>

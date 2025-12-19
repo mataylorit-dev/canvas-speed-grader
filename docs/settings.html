@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Account Settings - Canvas Speed Grader">
+  <title>Settings - Canvas Speed Grader</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="./css/design-system.css">
+  <link rel="stylesheet" href="./css/main.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="./images/favicon.svg">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="dashboard.html" class="navbar-brand">
+          <div class="navbar-brand-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"></path>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            </svg>
+          </div>
+          <span>SpeedGrader</span>
+        </a>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Main</div>
+          <a href="dashboard.html" class="sidebar-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            Dashboard
+          </a>
+          <a href="grading.html" class="sidebar-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"></path>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            </svg>
+            Grade Assignments
+          </a>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Settings</div>
+          <a href="settings.html" class="sidebar-link active">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+            Account
+          </a>
+          <a href="settings.html#courses" class="sidebar-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+            Courses
+          </a>
+          <a href="settings.html#billing" class="sidebar-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+              <line x1="1" y1="10" x2="23" y2="10"></line>
+            </svg>
+            Billing
+          </a>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="flex items-center gap-3 p-2 w-full rounded-lg transition hover:bg-gray-100" onclick="signOut()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          <span class="text-sm font-medium">Sign Out</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-with-sidebar">
+      <div class="page-header">
+        <div class="container">
+          <div class="page-header-content">
+            <div>
+              <h1 class="page-title">Settings</h1>
+              <p class="page-description">Manage your account and preferences</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <div class="container">
+          <div class="settings-layout">
+            <!-- Settings Navigation -->
+            <nav class="settings-nav">
+              <div class="settings-nav-item active" data-section="account">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                Account
+              </div>
+              <div class="settings-nav-item" data-section="canvas">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="3" y1="9" x2="21" y2="9"></line>
+                  <line x1="9" y1="21" x2="9" y2="9"></line>
+                </svg>
+                Canvas Integration
+              </div>
+              <div class="settings-nav-item" data-section="courses">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+                Courses
+              </div>
+            </nav>
+
+            <!-- Settings Content -->
+            <div class="settings-content">
+              <!-- Account Section -->
+              <div class="settings-section" id="accountSection">
+                <div class="settings-section-header">
+                  <h2 class="settings-section-title">Account Information</h2>
+                  <p class="settings-section-description">Update your personal details and email</p>
+                </div>
+                <div class="settings-section-body">
+                  <form id="accountForm">
+                    <div class="form-group">
+                      <label for="displayName" class="form-label">Display Name</label>
+                      <input type="text" id="displayName" name="displayName" class="form-input" placeholder="Your name">
+                    </div>
+
+                    <div class="form-group">
+                      <label for="email" class="form-label">Email Address</label>
+                      <input type="email" id="email" name="email" class="form-input" disabled>
+                      <p class="form-hint">Email cannot be changed</p>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                  </form>
+                </div>
+              </div>
+
+              <!-- Canvas Section -->
+              <div class="settings-section hidden" id="canvasSection">
+                <div class="settings-section-header">
+                  <h2 class="settings-section-title">Canvas Integration</h2>
+                  <p class="settings-section-description">Manage your Canvas LMS connection</p>
+                </div>
+                <div class="settings-section-body">
+                  <form id="canvasForm">
+                    <div class="form-group">
+                      <label for="canvasUrl" class="form-label">Canvas URL</label>
+                      <input type="url" id="canvasUrl" name="canvasUrl" class="form-input" placeholder="https://yourschool.instructure.com">
+                    </div>
+
+                    <div class="form-group">
+                      <label for="canvasToken" class="form-label">API Token</label>
+                      <input type="password" id="canvasToken" name="canvasToken" class="form-input" placeholder="Enter new token to update">
+                      <p class="form-hint">Leave blank to keep existing token</p>
+                    </div>
+
+                    <div class="flex gap-3">
+                      <button type="button" class="btn btn-secondary" onclick="testCanvasConnection()">
+                        Test Connection
+                      </button>
+                      <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                  </form>
+
+                  <div id="connectionStatus" class="alert mt-4 hidden"></div>
+                </div>
+              </div>
+
+              <!-- Courses Section -->
+              <div class="settings-section hidden" id="coursesSection">
+                <div class="settings-section-header">
+                  <h2 class="settings-section-title">Your Courses</h2>
+                  <p class="settings-section-description">Manage your enrolled Canvas courses</p>
+                </div>
+                <div class="settings-section-body">
+                  <div id="coursesList" class="space-y-4">
+                    <!-- Courses will be loaded here -->
+                    <div class="text-center py-8">
+                      <div class="spinner mx-auto"></div>
+                    </div>
+                  </div>
+
+                  <div class="divider"></div>
+
+                  <h3 class="font-semibold mb-4">Add New Course</h3>
+                  <form id="addCourseForm" class="flex gap-3">
+                    <input type="text" id="newCourseId" name="courseId" class="form-input flex-1" placeholder="Course ID">
+                    <button type="submit" class="btn btn-primary">Add Course</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+  <!-- App Scripts -->
+  <script src="./js/firebase-config.js"></script>
+  <script src="./js/auth.js"></script>
+  <script src="./js/api.js"></script>
+  <script src="./js/app.js"></script>
+
+  <script>
+    let userData = null;
+
+    // Check authentication
+    firebase.auth().onAuthStateChanged(async (user) => {
+      if (!user) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      // Load user data
+      userData = await Auth.getUserData();
+      populateSettings();
+    });
+
+    // Populate settings forms
+    function populateSettings() {
+      if (!userData) return;
+
+      document.getElementById('displayName').value = userData.display_name || '';
+      document.getElementById('email').value = userData.email || '';
+      document.getElementById('canvasUrl').value = userData.canvas_url || '';
+
+      loadCourses();
+    }
+
+    // Load courses
+    function loadCourses() {
+      const container = document.getElementById('coursesList');
+      const courses = userData?.courses || [];
+
+      if (courses.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state" style="padding: var(--space-8);">
+            <p class="text-muted">No courses added yet</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = courses.map(course => `
+        <div class="course-card ${course.id === userData.course_id ? 'active' : ''}">
+          <div class="course-card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+          </div>
+          <div class="course-card-content">
+            <div class="course-card-name">Course ${course.id}</div>
+            <div class="course-card-id">${course.id === userData.course_id ? 'Active Course' : 'Click to activate'}</div>
+          </div>
+          ${course.id !== userData.course_id ? `
+            <button class="btn btn-sm btn-ghost" onclick="setActiveCourse('${course.id}')">
+              Activate
+            </button>
+          ` : `
+            <span class="badge badge-success">Active</span>
+          `}
+        </div>
+      `).join('');
+    }
+
+    // Settings navigation
+    document.querySelectorAll('.settings-nav-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const section = item.dataset.section;
+
+        // Update nav active state
+        document.querySelectorAll('.settings-nav-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+
+        // Show correct section
+        document.querySelectorAll('.settings-section').forEach(s => s.classList.add('hidden'));
+        document.getElementById(`${section}Section`).classList.remove('hidden');
+      });
+    });
+
+    // Account form
+    document.getElementById('accountForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const displayName = document.getElementById('displayName').value;
+
+      try {
+        await Auth.updateProfile({ display_name: displayName });
+        showToast('Account updated successfully', 'success');
+      } catch (error) {
+        showToast(error.message, 'error');
+      }
+    });
+
+    // Canvas form
+    document.getElementById('canvasForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const canvasUrl = document.getElementById('canvasUrl').value;
+      const canvasToken = document.getElementById('canvasToken').value;
+
+      const updates = { canvas_url: canvasUrl };
+      if (canvasToken) {
+        updates.canvas_token = canvasToken;
+      }
+
+      try {
+        await Auth.updateProfile(updates);
+        showToast('Canvas settings updated', 'success');
+      } catch (error) {
+        showToast(error.message, 'error');
+      }
+    });
+
+    // Test Canvas connection
+    async function testCanvasConnection() {
+      const canvasUrl = document.getElementById('canvasUrl').value;
+      const canvasToken = document.getElementById('canvasToken').value || userData?.canvas_token;
+      const statusEl = document.getElementById('connectionStatus');
+
+      if (!canvasUrl || !canvasToken) {
+        statusEl.className = 'alert alert-warning mt-4';
+        statusEl.textContent = 'Please enter Canvas URL and token';
+        statusEl.classList.remove('hidden');
+        return;
+      }
+
+      statusEl.className = 'alert alert-info mt-4';
+      statusEl.textContent = 'Testing connection...';
+      statusEl.classList.remove('hidden');
+
+      try {
+        const result = await API.validateCanvasCredentials(canvasUrl, canvasToken);
+        if (result.valid) {
+          statusEl.className = 'alert alert-success mt-4';
+          statusEl.textContent = `Connection successful! Found ${result.courses?.length || 0} courses.`;
+        } else {
+          statusEl.className = 'alert alert-error mt-4';
+          statusEl.textContent = 'Connection failed. Please check your credentials.';
+        }
+      } catch (error) {
+        statusEl.className = 'alert alert-error mt-4';
+        statusEl.textContent = error.message;
+      }
+    }
+
+    // Add course form
+    document.getElementById('addCourseForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const courseId = document.getElementById('newCourseId').value;
+
+      if (!courseId) {
+        showToast('Please enter a course ID', 'error');
+        return;
+      }
+
+      try {
+        await Auth.addCourse({
+          courseId,
+          canvasUrl: userData.canvas_url
+        });
+        userData = await Auth.getUserData();
+        loadCourses();
+        document.getElementById('newCourseId').value = '';
+        showToast('Course added successfully', 'success');
+      } catch (error) {
+        showToast(error.message, 'error');
+      }
+    });
+
+    // Set active course
+    async function setActiveCourse(courseId) {
+      try {
+        await Auth.setActiveCourse(courseId);
+        userData = await Auth.getUserData();
+        loadCourses();
+        showToast('Active course updated', 'success');
+      } catch (error) {
+        showToast(error.message, 'error');
+      }
+    }
+
+    // Sign out
+    async function signOut() {
+      await firebase.auth().signOut();
+      window.location.href = 'login.html';
+    }
+
+    // Toast helper
+    function showToast(message, type = 'info') {
+      App.showToast(message, type);
+    }
+  </script>
+
+  <style>
+    .settings-layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: var(--space-6);
+    }
+
+    @media (max-width: 768px) {
+      .settings-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .settings-nav {
+        display: flex;
+        overflow-x: auto;
+        gap: var(--space-2);
+        padding-bottom: var(--space-4);
+      }
+
+      .settings-nav-item {
+        white-space: nowrap;
+      }
+    }
+
+    .settings-content {
+      min-width: 0;
+    }
+
+    .space-y-4 > * + * {
+      margin-top: var(--space-4);
+    }
+  </style>
+</body>
+</html>
