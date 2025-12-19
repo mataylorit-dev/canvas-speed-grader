@@ -39,7 +39,7 @@
   },
   "functions": {
     "source": "api",
-    "runtime": "python311",
+    "runtime": "python312",
     "ignore": [
       "venv",
       ".git",

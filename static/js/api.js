@@ -6,10 +6,8 @@
  */
 
 const API = {
-  // API base URL - change this to your deployed API URL
-  // For local development: '/api'
-  // For Render: 'https://speedgrade-api.onrender.com/api'
-  baseUrl: '/api',
+  // API base URL - Cloud Run deployment
+  baseUrl: 'https://speedgrade-api-891137567722.us-central1.run.app/api',
 
   /**
    * Make authenticated API request
