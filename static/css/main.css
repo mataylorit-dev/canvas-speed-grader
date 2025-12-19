@@ -216,7 +216,7 @@
    -------------------------------------------------------------------------- */
 .features-section {
   padding: var(--space-24) 0;
-  background-color: var(--bg-primary);
+  background: linear-gradient(180deg, #1e1b4b 0%, #0f172a 100%);
 }
 
 .section-header {
@@ -230,8 +230,8 @@
   padding: var(--space-2) var(--space-4);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-primary);
-  background-color: var(--color-primary-50);
+  color: #c4b5fd;
+  background-color: rgba(139, 92, 246, 0.2);
   border-radius: var(--radius-full);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -241,13 +241,13 @@
 .section-title {
   font-size: var(--font-size-3xl);
   font-weight: var(--font-weight-bold);
-  color: var(--text-primary);
+  color: #ffffff;
   margin-bottom: var(--space-4);
 }
 
 .section-description {
   font-size: var(--font-size-lg);
-  color: var(--text-tertiary);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .features-grid {
@@ -270,16 +270,18 @@
 
 .feature-card {
   padding: var(--space-8);
-  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--color-gray-50) 100%);
-  border: 1px solid var(--color-gray-100);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-2xl);
   transition: all var(--transition-base);
 }
 
 .feature-card:hover {
   transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--color-primary-200);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .feature-icon {
@@ -303,13 +305,13 @@
 .feature-title {
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-semibold);
-  color: var(--text-primary);
+  color: #ffffff;
   margin-bottom: var(--space-3);
 }
 
 .feature-description {
   font-size: var(--font-size-base);
-  color: var(--text-tertiary);
+  color: rgba(255, 255, 255, 0.7);
   line-height: var(--line-height-relaxed);
 }
 
