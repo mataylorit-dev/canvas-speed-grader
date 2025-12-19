@@ -1,26 +1,17 @@
 /**
  * Firebase Configuration
  * Canvas Speed Grader
- *
- * SETUP INSTRUCTIONS:
- * 1. Go to Firebase Console (https://console.firebase.google.com)
- * 2. Select your project (or create one)
- * 3. Click the gear icon > Project settings
- * 4. Scroll to "Your apps" > Web app (create one if needed)
- * 5. Copy the config values below
- *
- * IMPORTANT: These values are safe to expose in client-side code.
- * Firebase security rules protect your data, not these keys.
  */
 
-// Firebase configuration - replace with your project's config
+// Firebase configuration
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",                           // e.g., "AIzaSyB..."
-  authDomain: "YOUR_PROJECT.firebaseapp.com",       // e.g., "my-app.firebaseapp.com"
-  projectId: "YOUR_PROJECT_ID",                     // e.g., "my-app-12345"
-  storageBucket: "YOUR_PROJECT.appspot.com",        // e.g., "my-app-12345.appspot.com"
-  messagingSenderId: "YOUR_SENDER_ID",              // e.g., "123456789"
-  appId: "YOUR_APP_ID"                              // e.g., "1:123456789:web:abc123"
+  apiKey: "AIzaSyC_pplhocY_qEjndq2u66KaQPvOOf494-o",
+  authDomain: "speedgrade-96232.firebaseapp.com",
+  projectId: "speedgrade-96232",
+  storageBucket: "speedgrade-96232.firebasestorage.app",
+  messagingSenderId: "891137567722",
+  appId: "1:891137567722:web:b8db192a9a7d948e35a093",
+  measurementId: "G-RQXDTH6R18"
 };
 
 // Initialize Firebase
