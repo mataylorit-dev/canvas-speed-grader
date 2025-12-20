@@ -39,6 +39,10 @@ class PaymentService:
         Returns:
             True if user has active subscription
         """
+        # TESTING MODE: All users have free access
+        # TODO: Remove this when ready to enable payments
+        return True
+
         # Check if user is in free access list
         user_doc = self.db.collection('users').document(user_id).get()
         if user_doc.exists:
