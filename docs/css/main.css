@@ -1584,6 +1584,26 @@
   box-shadow: var(--shadow-lg);
 }
 
+/* Sidebar user button */
+.sidebar-user-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2);
+  width: 100%;
+  border-radius: var(--radius-lg);
+  transition: background-color 0.2s ease;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  text-align: left;
+}
+
+.sidebar-user-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
 /* Sidebar link animations */
 .sidebar-link-animate {
   position: relative;
