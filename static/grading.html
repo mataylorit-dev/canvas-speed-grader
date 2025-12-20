@@ -37,7 +37,7 @@
       <nav class="sidebar-nav">
         <div class="sidebar-section">
           <div class="sidebar-section-title">Main</div>
-          <a href="dashboard.html" class="sidebar-link">
+          <a href="dashboard.html" class="sidebar-link sidebar-link-animate">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="3" y="3" width="7" height="7"></rect>
               <rect x="14" y="3" width="7" height="7"></rect>
@@ -46,14 +46,14 @@
             </svg>
             Dashboard
           </a>
-          <a href="grading.html" class="sidebar-link active">
+          <a href="grading.html" class="sidebar-link active sidebar-link-animate">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 20h9"></path>
               <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
             </svg>
             Grade Assignments
           </a>
-          <a href="history.html" class="sidebar-link">
+          <a href="history.html" class="sidebar-link sidebar-link-animate">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="10"></circle>
               <polyline points="12 6 12 12 16 14"></polyline>
@@ -75,7 +75,7 @@
     </aside>
 
     <!-- Main Content -->
-    <main class="main-with-sidebar">
+    <main class="main-with-sidebar page-animate-in">
       <!-- Page Header -->
       <div class="page-header">
         <div class="container">
@@ -92,7 +92,7 @@
               <p class="page-description" id="assignmentDescription">Choose an assignment to start AI-powered grading</p>
             </div>
             <div class="flex items-center gap-3">
-              <button class="btn btn-secondary" id="exportBtn" disabled onclick="exportGrades()">
+              <button class="btn btn-secondary btn-animate" id="exportBtn" disabled onclick="exportGrades()">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                   <polyline points="7 10 12 15 17 10"></polyline>
@@ -100,7 +100,7 @@
                 </svg>
                 Export CSV
               </button>
-              <button class="btn btn-success" id="postGradesBtn" disabled onclick="postGrades()">
+              <button class="btn btn-success btn-animate" id="postGradesBtn" disabled onclick="postGrades()">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
@@ -114,7 +114,7 @@
       <div class="page-content">
         <div class="container">
           <!-- Assignment Selection (shown when no assignment selected) -->
-          <div id="assignmentSelector" class="card mb-6">
+          <div id="assignmentSelector" class="card card-animate mb-6">
             <div class="card-header">
               <h2 class="card-title">Select Assignment</h2>
               <p class="card-description">Choose an assignment with a rubric to grade</p>
@@ -147,7 +147,7 @@
                 </label>
               </div>
 
-              <button class="btn btn-primary btn-lg mt-6" id="startGradingBtn" onclick="startGrading()">
+              <button class="btn btn-primary btn-lg mt-6 btn-animate" id="startGradingBtn" onclick="startGrading()">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
                 </svg>
@@ -333,6 +333,7 @@
 
   <!-- App Scripts -->
   <script src="./js/firebase-config.js"></script>
+  <script src="./js/theme.js"></script>
   <script src="./js/auth.js"></script>
   <script src="./js/api.js"></script>
   <script src="./js/grading.js"></script>

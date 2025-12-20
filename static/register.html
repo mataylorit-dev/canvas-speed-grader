@@ -20,7 +20,7 @@
 </head>
 <body>
   <div class="auth-layout">
-    <div class="auth-container animate-scale-in" style="max-width: 520px;">
+    <div class="auth-container auth-container-wide animate-scale-in">
       <div class="auth-card">
         <div class="auth-header">
           <div class="auth-logo">
@@ -35,7 +35,7 @@
 
         <div class="auth-body">
           <!-- Google Sign Up -->
-          <button type="button" class="btn-google" id="googleSignUp">
+          <button type="button" class="btn-google btn-animate" id="googleSignUp">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
               <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -54,20 +54,6 @@
               <div class="step-dot active" id="step1Dot"></div>
               <div class="step-dot" id="step2Dot"></div>
             </div>
-            <style>
-              .step-dot {
-                width: 10px;
-                height: 10px;
-                border-radius: 50%;
-                background-color: var(--color-gray-300);
-                transition: all var(--transition-fast);
-              }
-              .step-dot.active {
-                background-color: var(--color-primary);
-                width: 32px;
-                border-radius: 5px;
-              }
-            </style>
 
             <!-- Step 1: Account Details -->
             <div id="step1">
@@ -111,7 +97,7 @@
                 </div>
               </div>
 
-              <button type="button" class="btn btn-primary btn-lg w-full" id="nextStep">
+              <button type="button" class="btn btn-primary btn-lg w-full btn-animate" id="nextStep">
                 Continue
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -201,7 +187,7 @@
                   </svg>
                   Back
                 </button>
-                <button type="submit" class="btn btn-primary btn-lg flex-1" id="registerButton">
+                <button type="submit" class="btn btn-primary btn-lg flex-1 btn-animate" id="registerButton">
                   <span id="registerButtonText">Create Account</span>
                   <div id="registerSpinner" class="spinner spinner-sm hidden"></div>
                 </button>
@@ -216,8 +202,8 @@
       </div>
 
       <!-- Back to Home Link -->
-      <div style="text-align: center; margin-top: var(--space-6);">
-        <a href="index.html" style="color: rgba(255,255,255,0.7); font-size: var(--font-size-sm); display: inline-flex; align-items: center; gap: var(--space-2);">
+      <div class="back-to-home-wrapper">
+        <a href="index.html" class="back-to-home">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="19" y1="12" x2="5" y2="12"></line>
             <polyline points="12 19 5 12 12 5"></polyline>
@@ -235,6 +221,7 @@
 
   <!-- App Scripts -->
   <script src="./js/firebase-config.js"></script>
+  <script src="./js/theme.js"></script>
   <script src="./js/auth.js"></script>
 
   <script>
