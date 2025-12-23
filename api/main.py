@@ -567,11 +567,12 @@ def set_active_course():
 @app.route('/api/canvas/validate', methods=['POST'])
 @require_auth
 def validate_canvas():
-    """Validate Canvas credentials"""
+    """Validate Canvas credentials and optionally save them"""
     try:
         data = request.get_json()
         canvas_url = data.get('canvasUrl')
         canvas_token = data.get('canvasToken')
+        save_credentials = data.get('save', False)
 
         if not canvas_url or not canvas_token:
             return jsonify({'error': 'Canvas URL and token are required'}), 400
@@ -579,13 +580,54 @@ def validate_canvas():
         canvas_service = CanvasService(canvas_url, canvas_token)
         valid = canvas_service.validate_credentials()
 
+        courses = canvas_service.get_courses() if valid else []
+
+        # Optionally save credentials and courses to user profile
+        if valid and save_credentials:
+            db.collection('users').document(request.user_id).set({
+                'canvas_url': canvas_url,
+                'canvas_token': canvas_token,
+                'courses': courses,
+                'updated_at': firestore.SERVER_TIMESTAMP
+            }, merge=True)
+
         return jsonify({
             'valid': valid,
-            'courses': canvas_service.get_courses() if valid else []
+            'courses': courses
         })
 
     except Exception as e:
         return jsonify({'error': str(e), 'valid': False}), 500
+
+
+@app.route('/api/canvas/courses', methods=['GET'])
+@require_auth
+def get_canvas_courses():
+    """Get courses from Canvas using saved credentials"""
+    try:
+        user_data = get_user_data(request.user_id)
+        if not user_data:
+            return jsonify({'error': 'User not found'}), 404
+
+        canvas_url = user_data.get('canvas_url')
+        canvas_token = user_data.get('canvas_token')
+
+        if not canvas_url or not canvas_token:
+            return jsonify({'error': 'Canvas credentials not configured', 'courses': []}), 400
+
+        canvas_service = CanvasService(canvas_url, canvas_token)
+        courses = canvas_service.get_courses()
+
+        # Update courses in user profile
+        db.collection('users').document(request.user_id).update({
+            'courses': courses,
+            'updated_at': firestore.SERVER_TIMESTAMP
+        })
+
+        return jsonify({'courses': courses})
+
+    except Exception as e:
+        return jsonify({'error': str(e), 'courses': []}), 500
 
 
 # =============================================================================
@@ -695,6 +737,189 @@ def stripe_webhook():
         payment_service.handle_subscription_cancelled(subscription)
 
     return jsonify({'received': True})
+
+
+# =============================================================================
+# Admin Routes
+# =============================================================================
+
+# Admin user emails (configure in environment)
+ADMIN_EMAILS = os.environ.get('ADMIN_EMAILS', '').split(',')
+ADMIN_EMAILS = [email.strip() for email in ADMIN_EMAILS if email.strip()]
+
+
+def require_admin(f):
+    """Decorator to require admin access"""
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        auth_header = request.headers.get('Authorization', '')
+
+        if not auth_header.startswith('Bearer '):
+            return jsonify({'error': 'Missing or invalid authorization header'}), 401
+
+        token = auth_header.split('Bearer ')[1]
+
+        try:
+            decoded_token = auth.verify_id_token(token)
+            user_email = decoded_token.get('email', '')
+
+            if user_email not in ADMIN_EMAILS:
+                return jsonify({'error': 'Admin access required'}), 403
+
+            request.user_id = decoded_token['uid']
+            request.user_email = user_email
+            return f(*args, **kwargs)
+        except Exception as e:
+            return jsonify({'error': 'Invalid or expired token', 'details': str(e)}), 401
+
+    return decorated_function
+
+
+@app.route('/api/admin/stats', methods=['GET'])
+@require_admin
+def admin_stats():
+    """Get overall platform statistics"""
+    try:
+        # Count users
+        users_ref = db.collection('users')
+        users = list(users_ref.stream())
+        user_count = len(users)
+
+        # Count users with Canvas configured
+        canvas_configured = sum(1 for u in users if u.to_dict().get('canvas_token'))
+
+        # Count subscriptions
+        subs_ref = db.collection('subscriptions')
+        subs = list(subs_ref.stream())
+        active_subs = sum(1 for s in subs if s.to_dict().get('status') == 'active')
+
+        # Recent grading sessions
+        grading_count = 0
+        for user in users:
+            history_ref = db.collection('grading_history').document(user.id).collection('history')
+            grading_count += len(list(history_ref.limit(100).stream()))
+
+        return jsonify({
+            'users': {
+                'total': user_count,
+                'canvasConfigured': canvas_configured
+            },
+            'subscriptions': {
+                'total': len(subs),
+                'active': active_subs
+            },
+            'gradingSessions': grading_count
+        })
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/admin/users', methods=['GET'])
+@require_admin
+def admin_list_users():
+    """List all users"""
+    try:
+        limit = int(request.args.get('limit', 50))
+        offset = int(request.args.get('offset', 0))
+
+        users_ref = db.collection('users').limit(limit).offset(offset)
+        users = []
+
+        for doc in users_ref.stream():
+            user_data = doc.to_dict()
+            # Don't return sensitive tokens
+            users.append({
+                'id': doc.id,
+                'email': user_data.get('email'),
+                'display_name': user_data.get('display_name'),
+                'canvas_url': user_data.get('canvas_url'),
+                'has_canvas_token': bool(user_data.get('canvas_token')),
+                'course_count': len(user_data.get('courses', [])),
+                'created_at': user_data.get('created_at'),
+                'last_login': user_data.get('last_login')
+            })
+
+        return jsonify({'users': users})
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/admin/users/<user_id>', methods=['GET'])
+@require_admin
+def admin_get_user(user_id):
+    """Get detailed user info"""
+    try:
+        user_doc = db.collection('users').document(user_id).get()
+        if not user_doc.exists:
+            return jsonify({'error': 'User not found'}), 404
+
+        user_data = user_doc.to_dict()
+
+        # Get subscription info
+        sub_doc = db.collection('subscriptions').document(user_id).get()
+        subscription = sub_doc.to_dict() if sub_doc.exists else None
+
+        # Get grading history count
+        history_ref = db.collection('grading_history').document(user_id).collection('history')
+        history_count = len(list(history_ref.stream()))
+
+        return jsonify({
+            'user': {
+                'id': user_doc.id,
+                'email': user_data.get('email'),
+                'display_name': user_data.get('display_name'),
+                'canvas_url': user_data.get('canvas_url'),
+                'has_canvas_token': bool(user_data.get('canvas_token')),
+                'courses': user_data.get('courses', []),
+                'course_id': user_data.get('course_id'),
+                'created_at': user_data.get('created_at'),
+                'last_login': user_data.get('last_login')
+            },
+            'subscription': subscription,
+            'gradingHistoryCount': history_count
+        })
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/admin/users/<user_id>', methods=['DELETE'])
+@require_admin
+def admin_delete_user(user_id):
+    """Delete a user"""
+    try:
+        # Delete from Firestore
+        db.collection('users').document(user_id).delete()
+        db.collection('subscriptions').document(user_id).delete()
+
+        # Delete grading history
+        history_ref = db.collection('grading_history').document(user_id).collection('history')
+        for doc in history_ref.stream():
+            doc.reference.delete()
+        db.collection('grading_history').document(user_id).delete()
+
+        # Delete from Firebase Auth
+        try:
+            auth.delete_user(user_id)
+        except Exception:
+            pass  # User might not exist in Auth
+
+        return jsonify({'success': True})
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/admin/check', methods=['GET'])
+@require_admin
+def admin_check():
+    """Check if current user is admin"""
+    return jsonify({
+        'isAdmin': True,
+        'email': request.user_email
+    })
 
 
 # =============================================================================

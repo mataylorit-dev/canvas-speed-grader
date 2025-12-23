@@ -329,8 +329,21 @@
 
       if (courses.length === 0) {
         container.innerHTML = `
-          <div class="empty-state" style="padding: var(--space-8);">
-            <p class="text-muted">No courses added yet</p>
+          <div class="empty-state" style="padding: var(--space-8); text-align: center;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 16px; opacity: 0.5;">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+            <p class="text-muted" style="margin-bottom: 16px;">No courses found</p>
+            <p class="text-muted text-sm" style="margin-bottom: 16px;">Configure your Canvas credentials to auto-import your courses</p>
+            <button class="btn btn-secondary btn-sm" onclick="refreshCourses()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 4 23 10 17 10"></polyline>
+                <polyline points="1 20 1 14 7 14"></polyline>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+              </svg>
+              Refresh from Canvas
+            </button>
           </div>
         `;
         return;
@@ -345,8 +358,8 @@
             </svg>
           </div>
           <div class="course-card-content">
-            <div class="course-card-name">Course ${course.id}</div>
-            <div class="course-card-id">${course.id === userData.course_id ? 'Active Course' : 'Click to activate'}</div>
+            <div class="course-card-name">${course.name || 'Course ' + course.id}</div>
+            <div class="course-card-id">${course.code ? course.code + ' - ' : ''}ID: ${course.id}</div>
           </div>
           ${course.id !== userData.course_id ? `
             <button class="btn btn-sm btn-ghost" onclick="setActiveCourse('${course.id}')">
@@ -387,26 +400,60 @@
       }
     });
 
-    // Canvas form
+    // Canvas form - save and validate credentials, then fetch courses
     document.getElementById('canvasForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const canvasUrl = document.getElementById('canvasUrl').value;
       const canvasToken = document.getElementById('canvasToken').value;
+      const statusEl = document.getElementById('connectionStatus');
 
-      const updates = { canvas_url: canvasUrl };
-      if (canvasToken) {
-        updates.canvas_token = canvasToken;
+      if (!canvasUrl) {
+        showToast('Please enter Canvas URL', 'error');
+        return;
       }
 
-      try {
-        await Auth.updateProfile(updates);
-        showToast('Canvas settings updated', 'success');
-      } catch (error) {
-        showToast(error.message, 'error');
+      // If token provided, validate and save with courses
+      if (canvasToken) {
+        statusEl.className = 'alert alert-info mt-4';
+        statusEl.textContent = 'Validating credentials and fetching courses...';
+        statusEl.classList.remove('hidden');
+
+        try {
+          // Validate and save credentials, which also fetches courses
+          const result = await API.validateCanvasCredentials(canvasUrl, canvasToken, true);
+
+          if (result.valid) {
+            statusEl.className = 'alert alert-success mt-4';
+            statusEl.textContent = `Connected! Found ${result.courses?.length || 0} courses.`;
+
+            // Reload user data to get updated courses
+            userData = await Auth.getUserData();
+            loadCourses();
+
+            // Clear token field
+            document.getElementById('canvasToken').value = '';
+            showToast('Canvas settings saved successfully', 'success');
+          } else {
+            statusEl.className = 'alert alert-error mt-4';
+            statusEl.textContent = 'Connection failed. Please check your credentials.';
+          }
+        } catch (error) {
+          statusEl.className = 'alert alert-error mt-4';
+          statusEl.textContent = error.message;
+          showToast(error.message, 'error');
+        }
+      } else {
+        // Just update URL without token
+        try {
+          await Auth.updateProfile({ canvas_url: canvasUrl });
+          showToast('Canvas URL updated', 'success');
+        } catch (error) {
+          showToast(error.message, 'error');
+        }
       }
     });
 
-    // Test Canvas connection
+    // Test Canvas connection (without saving)
     async function testCanvasConnection() {
       const canvasUrl = document.getElementById('canvasUrl').value;
       const canvasToken = document.getElementById('canvasToken').value || userData?.canvas_token;
@@ -424,10 +471,13 @@
       statusEl.classList.remove('hidden');
 
       try {
-        const result = await API.validateCanvasCredentials(canvasUrl, canvasToken);
+        const result = await API.validateCanvasCredentials(canvasUrl, canvasToken, false);
         if (result.valid) {
           statusEl.className = 'alert alert-success mt-4';
-          statusEl.textContent = `Connection successful! Found ${result.courses?.length || 0} courses.`;
+          statusEl.innerHTML = `
+            <strong>Connection successful!</strong><br>
+            Found ${result.courses?.length || 0} courses. Click "Save Changes" to save credentials and import courses.
+          `;
         } else {
           statusEl.className = 'alert alert-error mt-4';
           statusEl.textContent = 'Connection failed. Please check your credentials.';
@@ -435,6 +485,19 @@
       } catch (error) {
         statusEl.className = 'alert alert-error mt-4';
         statusEl.textContent = error.message;
+      }
+    }
+
+    // Refresh courses from Canvas
+    async function refreshCourses() {
+      try {
+        showToast('Fetching courses from Canvas...', 'info');
+        const result = await API.getCanvasCourses();
+        userData = await Auth.getUserData();
+        loadCourses();
+        showToast(`Found ${result.courses?.length || 0} courses`, 'success');
+      } catch (error) {
+        showToast(error.message, 'error');
       }
     }
 

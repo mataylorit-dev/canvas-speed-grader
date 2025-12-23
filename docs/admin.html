@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Admin Dashboard - Canvas Speed Grader">
+  <title>Admin Dashboard - Canvas Speed Grader</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="./css/design-system.css">
+  <link rel="stylesheet" href="./css/main.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="./images/favicon.svg">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="dashboard.html" class="navbar-brand">
+          <div class="navbar-brand-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"></path>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            </svg>
+          </div>
+          <span>SpeedGrader</span>
+        </a>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Admin</div>
+          <a href="admin.html" class="sidebar-link active sidebar-link-animate">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+            </svg>
+            Overview
+          </a>
+          <a href="admin.html#users" class="sidebar-link sidebar-link-animate">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            Users
+          </a>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">App</div>
+          <a href="dashboard.html" class="sidebar-link sidebar-link-animate">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            Dashboard
+          </a>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="flex items-center gap-3 p-2 w-full rounded-lg transition hover:bg-gray-100" onclick="signOut()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          <span class="text-sm font-medium">Sign Out</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-with-sidebar page-animate-in">
+      <!-- Access Denied Message (shown if not admin) -->
+      <div id="accessDenied" class="hidden" style="display: none;">
+        <div class="page-content">
+          <div class="container">
+            <div class="card" style="max-width: 500px; margin: 100px auto; text-align: center;">
+              <div class="card-body" style="padding: 48px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 24px; color: var(--color-error);">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                </svg>
+                <h2 style="color: #ffffff; margin-bottom: 12px;">Access Denied</h2>
+                <p style="color: rgba(255,255,255,0.7); margin-bottom: 24px;">You don't have permission to access the admin dashboard.</p>
+                <a href="dashboard.html" class="btn btn-primary">Go to Dashboard</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Admin Content -->
+      <div id="adminContent" style="display: none;">
+        <!-- Page Header -->
+        <div class="page-header">
+          <div class="container">
+            <div class="page-header-content">
+              <div>
+                <h1 class="page-title">Admin Dashboard</h1>
+                <p class="page-description">Platform overview and user management</p>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="badge badge-success" id="adminBadge">Admin</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="page-content">
+          <div class="container">
+            <!-- Stats Grid -->
+            <div class="dashboard-grid mb-8 stagger-list">
+              <div class="stat-card card-animate">
+                <div class="stat-card-header">
+                  <div class="stat-card-icon stat-card-icon-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="9" cy="7" r="4"></circle>
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                  </div>
+                </div>
+                <div class="stat-card-value" id="totalUsers">--</div>
+                <div class="stat-card-label">Total Users</div>
+              </div>
+
+              <div class="stat-card card-animate">
+                <div class="stat-card-header">
+                  <div class="stat-card-icon stat-card-icon-success">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="9 11 12 14 22 4"></polyline>
+                      <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                    </svg>
+                  </div>
+                </div>
+                <div class="stat-card-value" id="canvasConfigured">--</div>
+                <div class="stat-card-label">Canvas Configured</div>
+              </div>
+
+              <div class="stat-card card-animate">
+                <div class="stat-card-header">
+                  <div class="stat-card-icon stat-card-icon-warning">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                      <line x1="1" y1="10" x2="23" y2="10"></line>
+                    </svg>
+                  </div>
+                </div>
+                <div class="stat-card-value" id="activeSubscriptions">--</div>
+                <div class="stat-card-label">Active Subscriptions</div>
+              </div>
+
+              <div class="stat-card card-animate">
+                <div class="stat-card-header">
+                  <div class="stat-card-icon stat-card-icon-secondary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 20h9"></path>
+                      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                    </svg>
+                  </div>
+                </div>
+                <div class="stat-card-value" id="gradingSessions">--</div>
+                <div class="stat-card-label">Grading Sessions</div>
+              </div>
+            </div>
+
+            <!-- Users Table -->
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">Users</h2>
+                <p class="card-description">All registered users on the platform</p>
+              </div>
+              <div class="card-body">
+                <div class="table-container">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>User</th>
+                        <th>Canvas</th>
+                        <th>Courses</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                      <tr>
+                        <td colspan="5" class="text-center py-8">
+                          <div class="spinner mx-auto"></div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- User Details Modal -->
+  <div class="modal-backdrop" id="userModalBackdrop">
+    <div class="modal" id="userModal" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalUserName">User Details</h3>
+        <button class="modal-close" onclick="closeUserModal()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body" id="modalUserContent">
+        <div class="text-center py-8">
+          <div class="spinner mx-auto"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeUserModal()">Close</button>
+        <button class="btn btn-error" id="deleteUserBtn" onclick="confirmDeleteUser()">Delete User</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+  <!-- App Scripts -->
+  <script src="./js/firebase-config.js"></script>
+  <script src="./js/theme.js"></script>
+  <script src="./js/auth.js"></script>
+  <script src="./js/api.js"></script>
+
+  <script>
+    let currentUserId = null;
+
+    // Check authentication and admin status
+    firebase.auth().onAuthStateChanged(async (user) => {
+      if (!user) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      try {
+        // Check if user is admin
+        const adminCheck = await API.checkAdmin();
+        if (adminCheck.isAdmin) {
+          document.getElementById('adminContent').style.display = 'block';
+          document.getElementById('accessDenied').style.display = 'none';
+          loadAdminData();
+        } else {
+          showAccessDenied();
+        }
+      } catch (error) {
+        console.error('Admin check failed:', error);
+        showAccessDenied();
+      }
+    });
+
+    function showAccessDenied() {
+      document.getElementById('adminContent').style.display = 'none';
+      document.getElementById('accessDenied').style.display = 'block';
+    }
+
+    // Load admin data
+    async function loadAdminData() {
+      try {
+        // Load stats
+        const stats = await API.getAdminStats();
+        document.getElementById('totalUsers').textContent = stats.users.total;
+        document.getElementById('canvasConfigured').textContent = stats.users.canvasConfigured;
+        document.getElementById('activeSubscriptions').textContent = stats.subscriptions.active;
+        document.getElementById('gradingSessions').textContent = stats.gradingSessions;
+
+        // Load users
+        const usersData = await API.getAdminUsers();
+        renderUsersTable(usersData.users);
+      } catch (error) {
+        console.error('Failed to load admin data:', error);
+        showToast('Failed to load admin data', 'error');
+      }
+    }
+
+    // Render users table
+    function renderUsersTable(users) {
+      const tbody = document.getElementById('usersTableBody');
+
+      if (!users || users.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5" class="text-center py-8 text-muted">No users found</td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = users.map(user => `
+        <tr>
+          <td>
+            <div class="flex items-center gap-3">
+              <div class="avatar">${(user.display_name || user.email || '?')[0].toUpperCase()}</div>
+              <div>
+                <div class="font-medium">${user.display_name || 'No name'}</div>
+                <div class="text-sm text-muted">${user.email || 'No email'}</div>
+              </div>
+            </div>
+          </td>
+          <td>
+            ${user.has_canvas_token
+              ? '<span class="badge badge-success">Configured</span>'
+              : '<span class="badge badge-warning">Not set</span>'
+            }
+          </td>
+          <td>${user.course_count || 0}</td>
+          <td>${user.created_at ? new Date(user.created_at).toLocaleDateString() : '--'}</td>
+          <td>
+            <button class="btn btn-sm btn-secondary" onclick="viewUser('${user.id}')">
+              View
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // View user details
+    async function viewUser(userId) {
+      currentUserId = userId;
+      document.getElementById('userModalBackdrop').classList.add('active');
+      document.getElementById('userModal').classList.add('active');
+      document.getElementById('modalUserContent').innerHTML = `
+        <div class="text-center py-8">
+          <div class="spinner mx-auto"></div>
+        </div>
+      `;
+
+      try {
+        const data = await API.getAdminUser(userId);
+        const user = data.user;
+        const subscription = data.subscription;
+
+        document.getElementById('modalUserName').textContent = user.display_name || user.email || 'User Details';
+        document.getElementById('modalUserContent').innerHTML = `
+          <div class="space-y-4">
+            <div>
+              <label class="form-label">Email</label>
+              <div class="form-input" style="background: rgba(255,255,255,0.05);">${user.email || '--'}</div>
+            </div>
+            <div>
+              <label class="form-label">User ID</label>
+              <div class="form-input" style="background: rgba(255,255,255,0.05); font-family: monospace; font-size: 12px;">${user.id}</div>
+            </div>
+            <div>
+              <label class="form-label">Canvas URL</label>
+              <div class="form-input" style="background: rgba(255,255,255,0.05);">${user.canvas_url || 'Not configured'}</div>
+            </div>
+            <div>
+              <label class="form-label">Canvas Token</label>
+              <div class="form-input" style="background: rgba(255,255,255,0.05);">${user.has_canvas_token ? 'Configured' : 'Not set'}</div>
+            </div>
+            <div>
+              <label class="form-label">Courses (${user.courses?.length || 0})</label>
+              <div class="form-input" style="background: rgba(255,255,255,0.05);">
+                ${user.courses?.length > 0
+                  ? user.courses.map(c => c.name || c.id).join(', ')
+                  : 'No courses'
+                }
+              </div>
+            </div>
+            <div>
+              <label class="form-label">Active Course ID</label>
+              <div class="form-input" style="background: rgba(255,255,255,0.05);">${user.course_id || 'None selected'}</div>
+            </div>
+            <div>
+              <label class="form-label">Subscription Status</label>
+              <div class="form-input" style="background: rgba(255,255,255,0.05);">
+                ${subscription?.status || 'No subscription'}
+                ${subscription?.plan ? ` (${subscription.plan})` : ''}
+              </div>
+            </div>
+            <div>
+              <label class="form-label">Grading Sessions</label>
+              <div class="form-input" style="background: rgba(255,255,255,0.05);">${data.gradingHistoryCount || 0}</div>
+            </div>
+          </div>
+        `;
+      } catch (error) {
+        console.error('Failed to load user:', error);
+        document.getElementById('modalUserContent').innerHTML = `
+          <div class="alert alert-error">
+            Failed to load user details: ${error.message}
+          </div>
+        `;
+      }
+    }
+
+    // Close user modal
+    function closeUserModal() {
+      document.getElementById('userModalBackdrop').classList.remove('active');
+      document.getElementById('userModal').classList.remove('active');
+      currentUserId = null;
+    }
+
+    // Confirm delete user
+    async function confirmDeleteUser() {
+      if (!currentUserId) return;
+
+      if (!confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
+        return;
+      }
+
+      try {
+        await API.deleteAdminUser(currentUserId);
+        closeUserModal();
+        showToast('User deleted successfully', 'success');
+        loadAdminData();
+      } catch (error) {
+        console.error('Failed to delete user:', error);
+        showToast('Failed to delete user: ' + error.message, 'error');
+      }
+    }
+
+    // Sign out
+    async function signOut() {
+      await firebase.auth().signOut();
+      window.location.href = 'login.html';
+    }
+
+    // Toast notification
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerHTML = `
+        <svg class="toast-icon" style="color: var(--color-${type === 'error' ? 'error' : type === 'success' ? 'success' : 'info'})" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          ${type === 'success' ? '<circle cx="12" cy="12" r="10"></circle><polyline points="9 11 12 14 22 4"></polyline>' : '<circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line>'}
+        </svg>
+        <div class="toast-content">
+          <p class="toast-message">${message}</p>
+        </div>
+        <button class="toast-close" onclick="this.parentElement.remove()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 5000);
+    }
+  </script>
+
+  <style>
+    .space-y-4 > * + * {
+      margin-top: var(--space-4);
+    }
+  </style>
+</body>
+</html>

@@ -172,10 +172,58 @@ const API = {
   /**
    * Validate Canvas credentials
    */
-  async validateCanvasCredentials(canvasUrl, canvasToken) {
+  async validateCanvasCredentials(canvasUrl, canvasToken, save = false) {
     return this.request('/canvas/validate', {
       method: 'POST',
-      body: JSON.stringify({ canvasUrl, canvasToken })
+      body: JSON.stringify({ canvasUrl, canvasToken, save })
+    });
+  },
+
+  /**
+   * Get courses from Canvas
+   */
+  async getCanvasCourses() {
+    return this.request('/canvas/courses');
+  },
+
+  // =========================================================================
+  // Admin API Methods
+  // =========================================================================
+
+  /**
+   * Check if current user is admin
+   */
+  async checkAdmin() {
+    return this.request('/admin/check');
+  },
+
+  /**
+   * Get platform statistics (admin only)
+   */
+  async getAdminStats() {
+    return this.request('/admin/stats');
+  },
+
+  /**
+   * Get all users (admin only)
+   */
+  async getAdminUsers(limit = 50, offset = 0) {
+    return this.request(`/admin/users?limit=${limit}&offset=${offset}`);
+  },
+
+  /**
+   * Get user details (admin only)
+   */
+  async getAdminUser(userId) {
+    return this.request(`/admin/users/${userId}`);
+  },
+
+  /**
+   * Delete user (admin only)
+   */
+  async deleteAdminUser(userId) {
+    return this.request(`/admin/users/${userId}`, {
+      method: 'DELETE'
     });
   },
 
