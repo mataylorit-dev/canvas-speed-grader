@@ -131,6 +131,14 @@
   <script src="./js/auth.js"></script>
 
   <script>
+    // Check if already logged in - redirect to dashboard
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        // User is signed in, redirect to dashboard
+        window.location.href = 'dashboard.html';
+      }
+    });
+
     // Login form handler
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
