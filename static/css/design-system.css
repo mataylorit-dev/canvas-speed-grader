@@ -493,6 +493,16 @@ ol {
   color: var(--text-primary);
 }
 
+/* Ghost button in dark navbar */
+.navbar .btn-ghost {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.navbar .btn-ghost:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
 .btn-success {
   background: linear-gradient(135deg, var(--color-success) 0%, var(--color-success-dark) 100%);
   color: var(--text-inverse);
@@ -752,9 +762,9 @@ ol {
   position: sticky;
   top: 0;
   z-index: var(--z-sticky);
-  background-color: rgba(255, 255, 255, 0.9);
+  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--color-gray-100);
+  border-bottom: 1px solid rgba(129, 140, 248, 0.2);
 }
 
 .navbar-container {
@@ -773,7 +783,7 @@ ol {
   gap: var(--space-3);
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
-  color: var(--text-primary);
+  color: #ffffff;
 }
 
 .navbar-brand-icon {
@@ -797,19 +807,19 @@ ol {
   padding: var(--space-2) var(--space-4);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.8);
   border-radius: var(--radius-md);
   transition: all var(--transition-fast);
 }
 
 .navbar-link:hover {
-  color: var(--text-primary);
-  background-color: var(--color-gray-100);
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .navbar-link.active {
-  color: var(--color-primary);
-  background-color: var(--color-primary-50);
+  color: #ffffff;
+  background-color: rgba(129, 140, 248, 0.3);
 }
 
 .navbar-actions {
@@ -825,6 +835,7 @@ ol {
   background: transparent;
   border: none;
   cursor: pointer;
+  color: #ffffff;
 }
 
 @media (max-width: 768px) {

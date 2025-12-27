@@ -1451,6 +1451,34 @@
   padding: 0 var(--space-8) var(--space-8);
 }
 
+/* Ensure form inputs are visible in auth cards */
+.auth-card .form-input {
+  background-color: #ffffff;
+  border: 1px solid var(--color-gray-300);
+  color: var(--text-primary);
+}
+
+.auth-card .form-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgb(79 70 229 / 0.1);
+}
+
+.auth-card .form-input::placeholder {
+  color: var(--text-muted);
+}
+
+.auth-card .form-label {
+  color: var(--text-primary);
+}
+
+.auth-card .form-checkbox-label {
+  color: var(--text-secondary);
+}
+
+.auth-card .input-group-icon {
+  color: var(--text-muted);
+}
+
 .auth-footer {
   text-align: center;
   padding: var(--space-4) var(--space-8);
