@@ -495,12 +495,17 @@ ol {
 
 /* Ghost button in dark navbar */
 .navbar .btn-ghost {
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.9) !important;
 }
 
 .navbar .btn-ghost:hover:not(:disabled) {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="light"] .navbar .btn-ghost,
+[data-theme="dark"] .navbar .btn-ghost {
+  color: rgba(255, 255, 255, 0.9) !important;
 }
 
 .btn-success {
@@ -762,9 +767,16 @@ ol {
   position: sticky;
   top: 0;
   z-index: var(--z-sticky);
-  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%) !important;
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(129, 140, 248, 0.2);
+  border-bottom: 1px solid rgba(129, 140, 248, 0.2) !important;
+}
+
+/* Force dark navbar on all theme settings */
+[data-theme="light"] .navbar,
+[data-theme="dark"] .navbar {
+  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%) !important;
+  border-bottom: 1px solid rgba(129, 140, 248, 0.2) !important;
 }
 
 .navbar-container {
@@ -783,7 +795,12 @@ ol {
   gap: var(--space-3);
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
-  color: #ffffff;
+  color: #ffffff !important;
+}
+
+[data-theme="light"] .navbar-brand,
+[data-theme="dark"] .navbar-brand {
+  color: #ffffff !important;
 }
 
 .navbar-brand-icon {
@@ -807,19 +824,30 @@ ol {
   padding: var(--space-2) var(--space-4);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.8) !important;
   border-radius: var(--radius-md);
   transition: all var(--transition-fast);
 }
 
 .navbar-link:hover {
-  color: #ffffff;
-  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
 }
 
 .navbar-link.active {
-  color: #ffffff;
-  background-color: rgba(129, 140, 248, 0.3);
+  color: #ffffff !important;
+  background-color: rgba(129, 140, 248, 0.3) !important;
+}
+
+[data-theme="light"] .navbar-link,
+[data-theme="dark"] .navbar-link {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+[data-theme="light"] .navbar-link:hover,
+[data-theme="dark"] .navbar-link:hover {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
 }
 
 .navbar-actions {
@@ -835,7 +863,12 @@ ol {
   background: transparent;
   border: none;
   cursor: pointer;
-  color: #ffffff;
+  color: #ffffff !important;
+}
+
+[data-theme="light"] .navbar-mobile-toggle,
+[data-theme="dark"] .navbar-mobile-toggle {
+  color: #ffffff !important;
 }
 
 @media (max-width: 768px) {
