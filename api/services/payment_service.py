@@ -22,8 +22,15 @@ class PaymentService:
         """
         self.db = db
         stripe.api_key = os.environ.get('STRIPE_SECRET_KEY')
-        self.price_single = os.environ.get('STRIPE_PRICE_SINGLE', 'price_single_class')
-        self.price_bundle = os.environ.get('STRIPE_PRICE_BUNDLE', 'price_bundle')
+
+        # Price IDs - these should match your Stripe dashboard
+        self.price_monthly = os.environ.get('STRIPE_PRICE_MONTHLY', 'price_monthly_999')  # $9.99/month per class
+        self.price_yearly = os.environ.get('STRIPE_PRICE_YEARLY', 'price_yearly_199')      # $199/year for 3 classes
+        self.price_extra_class = os.environ.get('STRIPE_PRICE_EXTRA', 'price_extra_class_49')  # $49/year per additional class
+
+        # Legacy price IDs (for backwards compatibility)
+        self.price_single = self.price_monthly
+        self.price_bundle = self.price_yearly
 
         # Free access users (for testing)
         free_users_str = os.environ.get('FREE_ACCESS_USERS', '')
@@ -90,6 +97,7 @@ class PaymentService:
                     'status': 'active',
                     'plan': 'free',
                     'plan_name': 'Free Access',
+                    'classes_included': 999,  # Unlimited for free users
                     'is_free': True
                 }
 
@@ -101,16 +109,31 @@ class PaymentService:
                 'status': 'none',
                 'plan': None,
                 'plan_name': 'No subscription',
+                'classes_included': 0,
                 'is_free': False
             }
 
         sub_data = sub_doc.to_dict()
+        plan = sub_data.get('plan', 'monthly')
+
+        # Calculate classes included based on plan
+        if plan == 'yearly':
+            base_classes = 3
+            extra_classes = sub_data.get('extra_classes', 0)
+            classes_included = base_classes + extra_classes
+        else:
+            # Monthly plan: 1 class per subscription
+            classes_included = sub_data.get('classes_included', 1)
 
         return {
             'status': sub_data.get('status', 'unknown'),
-            'plan': sub_data.get('plan', 'single'),
-            'plan_name': self._get_plan_name(sub_data.get('plan')),
+            'plan': plan,
+            'plan_name': self._get_plan_name(plan),
+            'classes_included': classes_included,
+            'extra_classes': sub_data.get('extra_classes', 0),
             'current_period_end': sub_data.get('current_period_end'),
+            'next_billing_date': sub_data.get('current_period_end'),
+            'amount': sub_data.get('amount'),
             'cancel_at_period_end': sub_data.get('cancel_at_period_end', False),
             'stripe_subscription_id': sub_data.get('stripe_subscription_id'),
             'is_free': False
@@ -119,14 +142,17 @@ class PaymentService:
     def _get_plan_name(self, plan: str) -> str:
         """Get human-readable plan name"""
         names = {
-            'single': 'Single Class',
-            'bundle': 'Multi-Class Bundle',
+            'monthly': 'Monthly Plan',
+            'yearly': 'Yearly Bundle',
+            'single': 'Monthly Plan',  # Legacy
+            'bundle': 'Yearly Bundle',  # Legacy
             'free': 'Free Access'
         }
         return names.get(plan, 'Unknown Plan')
 
     def create_checkout_session(self, user_id: str, price_id: str,
-                                 success_url: str, cancel_url: str) -> str:
+                                 success_url: str, cancel_url: str,
+                                 quantity: int = 1) -> str:
         """
         Create a Stripe checkout session
 
@@ -135,6 +161,7 @@ class PaymentService:
             price_id: Stripe price ID
             success_url: URL to redirect on success
             cancel_url: URL to redirect on cancel
+            quantity: Number of items (for extra classes)
 
         Returns:
             Checkout session URL
@@ -151,18 +178,27 @@ class PaymentService:
         if sub_doc.exists:
             customer_id = sub_doc.to_dict().get('stripe_customer_id')
 
+        # Determine plan type from price_id
+        plan_type = 'monthly'
+        if price_id == self.price_yearly or 'yearly' in price_id:
+            plan_type = 'yearly'
+        elif price_id == self.price_extra_class or 'extra' in price_id:
+            plan_type = 'extra_class'
+
         # Create checkout session
         session_params = {
             'payment_method_types': ['card'],
             'line_items': [{
                 'price': price_id,
-                'quantity': 1
+                'quantity': quantity
             }],
             'mode': 'subscription',
             'success_url': success_url,
             'cancel_url': cancel_url,
             'metadata': {
-                'user_id': user_id
+                'user_id': user_id,
+                'plan_type': plan_type,
+                'quantity': str(quantity)
             }
         }
 
@@ -174,7 +210,9 @@ class PaymentService:
         # Allow subscription updates
         session_params['subscription_data'] = {
             'metadata': {
-                'user_id': user_id
+                'user_id': user_id,
+                'plan_type': plan_type,
+                'quantity': str(quantity)
             }
         }
 
@@ -200,19 +238,24 @@ class PaymentService:
         # Get subscription details from Stripe
         subscription = stripe.Subscription.retrieve(subscription_id)
 
-        # Determine plan from price
-        plan = 'single'
-        if subscription.get('items', {}).get('data'):
-            price_id = subscription['items']['data'][0]['price']['id']
-            if price_id == self.price_bundle:
-                plan = 'bundle'
+        # Determine plan from metadata or price
+        plan_type = session.get('metadata', {}).get('plan_type', 'monthly')
+        quantity = int(session.get('metadata', {}).get('quantity', '1'))
 
-        # Update subscription in Firestore
-        self.db.collection('subscriptions').document(user_id).set({
+        # Map legacy plan names
+        if plan_type in ['single', 'bundle']:
+            plan_type = 'yearly' if plan_type == 'bundle' else 'monthly'
+
+        # Calculate amount for display
+        amount = session.get('amount_total', 0)
+
+        # Prepare subscription data
+        sub_data = {
             'stripe_customer_id': customer_id,
             'stripe_subscription_id': subscription_id,
             'status': subscription.get('status', 'active'),
-            'plan': plan,
+            'plan': plan_type,
+            'amount': amount,
             'current_period_start': datetime.fromtimestamp(
                 subscription.get('current_period_start', 0)
             ).isoformat(),
@@ -221,12 +264,34 @@ class PaymentService:
             ).isoformat(),
             'cancel_at_period_end': subscription.get('cancel_at_period_end', False),
             'updated_at': datetime.now().isoformat()
-        })
+        }
+
+        # Handle different plan types
+        if plan_type == 'yearly':
+            sub_data['classes_included'] = 3
+            sub_data['extra_classes'] = 0
+        elif plan_type == 'extra_class':
+            # Adding extra classes to existing yearly plan
+            existing_sub = self.db.collection('subscriptions').document(user_id).get()
+            if existing_sub.exists:
+                existing_data = existing_sub.to_dict()
+                current_extra = existing_data.get('extra_classes', 0)
+                sub_data['extra_classes'] = current_extra + quantity
+                sub_data['plan'] = 'yearly'  # Keep as yearly plan
+                sub_data['classes_included'] = 3 + sub_data['extra_classes']
+        else:
+            # Monthly plan
+            sub_data['classes_included'] = 1
+
+        # Update subscription in Firestore
+        self.db.collection('subscriptions').document(user_id).set(sub_data, merge=True)
 
         # Log payment
         self.db.collection('payments').document(user_id).collection('history').add({
-            'type': 'subscription_created',
-            'amount': session.get('amount_total', 0) / 100,
+            'type': 'subscription_created' if plan_type != 'extra_class' else 'extra_classes_added',
+            'plan': plan_type,
+            'quantity': quantity,
+            'amount': amount / 100,
             'currency': session.get('currency', 'usd'),
             'stripe_session_id': session.get('id'),
             'created_at': datetime.now().isoformat()

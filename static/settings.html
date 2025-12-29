@@ -147,6 +147,13 @@
                 </svg>
                 Appearance
               </div>
+              <div class="settings-nav-item" data-section="billing">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                  <line x1="1" y1="10" x2="23" y2="10"></line>
+                </svg>
+                Billing
+              </div>
             </nav>
 
             <!-- Settings Content -->
@@ -271,6 +278,111 @@
                         <span>System</span>
                       </button>
                     </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Billing Section -->
+              <div class="settings-section hidden" id="billingSection">
+                <div class="settings-section-header">
+                  <h2 class="settings-section-title">Billing & Subscription</h2>
+                  <p class="settings-section-description">Manage your subscription and payment methods</p>
+                </div>
+                <div class="settings-section-body">
+                  <!-- Current Subscription Status -->
+                  <div id="subscriptionStatus" class="card mb-6">
+                    <div class="card-body">
+                      <div class="flex items-center justify-between">
+                        <div>
+                          <h3 class="font-semibold text-lg" id="currentPlanName">Free Trial</h3>
+                          <p class="text-muted text-sm" id="currentPlanDetails">No active subscription</p>
+                        </div>
+                        <span class="badge" id="subscriptionBadge">Inactive</span>
+                      </div>
+                      <div id="subscriptionInfo" class="mt-4 hidden">
+                        <div class="flex justify-between text-sm mb-2">
+                          <span class="text-muted">Classes included:</span>
+                          <span class="font-medium" id="classesIncluded">0</span>
+                        </div>
+                        <div class="flex justify-between text-sm mb-2">
+                          <span class="text-muted">Next billing date:</span>
+                          <span class="font-medium" id="nextBillingDate">--</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                          <span class="text-muted">Amount:</span>
+                          <span class="font-medium" id="billingAmount">--</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Available Plans -->
+                  <h3 class="font-semibold mb-4">Choose a Plan</h3>
+                  <div class="billing-plans-grid">
+                    <!-- Monthly Plan -->
+                    <div class="billing-plan-card" data-plan="monthly">
+                      <div class="billing-plan-header">
+                        <h4 class="billing-plan-name">Monthly</h4>
+                        <div class="billing-plan-price">
+                          <span class="billing-plan-amount">$9.99</span>
+                          <span class="billing-plan-period">/month per class</span>
+                        </div>
+                      </div>
+                      <ul class="billing-plan-features">
+                        <li>1 Canvas course</li>
+                        <li>Unlimited assignments</li>
+                        <li>Cancel anytime</li>
+                      </ul>
+                      <button class="btn btn-secondary w-full" onclick="subscribeToPlan('monthly')">
+                        Subscribe Monthly
+                      </button>
+                    </div>
+
+                    <!-- Yearly Plan -->
+                    <div class="billing-plan-card featured" data-plan="yearly">
+                      <div class="billing-plan-badge">Best Value</div>
+                      <div class="billing-plan-header">
+                        <h4 class="billing-plan-name">Yearly Bundle</h4>
+                        <div class="billing-plan-price">
+                          <span class="billing-plan-amount">$199</span>
+                          <span class="billing-plan-period">/year</span>
+                        </div>
+                      </div>
+                      <ul class="billing-plan-features">
+                        <li><strong>3 classes included</strong></li>
+                        <li>+$49/year per additional class</li>
+                        <li>Save $160/year vs monthly</li>
+                        <li>Priority support</li>
+                      </ul>
+                      <button class="btn btn-primary w-full" onclick="subscribeToPlan('yearly')">
+                        Subscribe Yearly
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Add Extra Classes (for yearly plan) -->
+                  <div id="addClassesSection" class="mt-6 hidden">
+                    <div class="divider"></div>
+                    <h3 class="font-semibold mb-4">Add Extra Classes</h3>
+                    <p class="text-muted text-sm mb-4">Add more classes to your yearly subscription for $49/year each.</p>
+                    <div class="flex gap-3 items-center">
+                      <select id="extraClassesSelect" class="form-input" style="width: auto;">
+                        <option value="1">1 extra class (+$49/year)</option>
+                        <option value="2">2 extra classes (+$98/year)</option>
+                        <option value="3">3 extra classes (+$147/year)</option>
+                        <option value="4">4 extra classes (+$196/year)</option>
+                        <option value="5">5 extra classes (+$245/year)</option>
+                      </select>
+                      <button class="btn btn-secondary" onclick="addExtraClasses()">Add Classes</button>
+                    </div>
+                  </div>
+
+                  <!-- Cancel Subscription -->
+                  <div id="cancelSection" class="mt-6 hidden">
+                    <div class="divider"></div>
+                    <h3 class="font-semibold mb-4">Cancel Subscription</h3>
+                    <p class="text-muted text-sm mb-4">Your subscription will remain active until the end of the current billing period.</p>
+                    <button class="btn btn-outline-error" onclick="cancelSubscription()">Cancel Subscription</button>
                   </div>
                 </div>
               </div>
@@ -553,6 +665,140 @@
       Theme.bindToggleButtons();
       Theme.updateToggleUI(Theme.get());
     });
+
+    // =========================================================================
+    // Billing Functions
+    // =========================================================================
+
+    // Load subscription status
+    async function loadSubscription() {
+      try {
+        const subscription = await API.getSubscription();
+        updateSubscriptionUI(subscription);
+      } catch (error) {
+        console.error('Failed to load subscription:', error);
+      }
+    }
+
+    // Update subscription UI based on status
+    function updateSubscriptionUI(subscription) {
+      const planName = document.getElementById('currentPlanName');
+      const planDetails = document.getElementById('currentPlanDetails');
+      const badge = document.getElementById('subscriptionBadge');
+      const subscriptionInfo = document.getElementById('subscriptionInfo');
+      const addClassesSection = document.getElementById('addClassesSection');
+      const cancelSection = document.getElementById('cancelSection');
+
+      if (subscription && subscription.status === 'active') {
+        // Active subscription
+        const isYearly = subscription.plan === 'yearly';
+        planName.textContent = isYearly ? 'Yearly Bundle' : 'Monthly Plan';
+        planDetails.textContent = isYearly
+          ? `${subscription.classes_included || 3} classes included`
+          : '1 class included';
+
+        badge.textContent = 'Active';
+        badge.className = 'badge badge-success';
+
+        // Show subscription details
+        subscriptionInfo.classList.remove('hidden');
+        document.getElementById('classesIncluded').textContent = subscription.classes_included || (isYearly ? 3 : 1);
+        document.getElementById('nextBillingDate').textContent = subscription.next_billing_date
+          ? new Date(subscription.next_billing_date).toLocaleDateString()
+          : '--';
+        document.getElementById('billingAmount').textContent = subscription.amount
+          ? `$${(subscription.amount / 100).toFixed(2)}`
+          : (isYearly ? '$199.00' : '$9.99');
+
+        // Show add classes option for yearly
+        if (isYearly) {
+          addClassesSection.classList.remove('hidden');
+        } else {
+          addClassesSection.classList.add('hidden');
+        }
+
+        // Show cancel option
+        cancelSection.classList.remove('hidden');
+      } else {
+        // No active subscription
+        planName.textContent = 'No Active Plan';
+        planDetails.textContent = 'Subscribe to start grading';
+        badge.textContent = 'Inactive';
+        badge.className = 'badge badge-secondary';
+        subscriptionInfo.classList.add('hidden');
+        addClassesSection.classList.add('hidden');
+        cancelSection.classList.add('hidden');
+      }
+    }
+
+    // Subscribe to a plan
+    async function subscribeToPlan(planType) {
+      try {
+        showToast('Redirecting to checkout...', 'info');
+
+        // Create checkout session
+        const priceId = planType === 'yearly' ? 'price_yearly_199' : 'price_monthly_999';
+        const result = await API.createCheckoutSession(priceId);
+
+        if (result.checkoutUrl) {
+          // Redirect to Stripe Checkout
+          window.location.href = result.checkoutUrl;
+        } else {
+          throw new Error('Failed to create checkout session');
+        }
+      } catch (error) {
+        showToast('Failed to start checkout: ' + error.message, 'error');
+      }
+    }
+
+    // Add extra classes to yearly subscription
+    async function addExtraClasses() {
+      const count = document.getElementById('extraClassesSelect').value;
+      try {
+        showToast('Redirecting to checkout...', 'info');
+
+        // Create checkout session for extra classes
+        const result = await API.createCheckoutSession('price_extra_class_49', { quantity: parseInt(count) });
+
+        if (result.checkoutUrl) {
+          window.location.href = result.checkoutUrl;
+        } else {
+          throw new Error('Failed to create checkout session');
+        }
+      } catch (error) {
+        showToast('Failed to add classes: ' + error.message, 'error');
+      }
+    }
+
+    // Cancel subscription
+    async function cancelSubscription() {
+      if (!confirm('Are you sure you want to cancel your subscription? You will retain access until the end of your billing period.')) {
+        return;
+      }
+
+      try {
+        await API.cancelSubscription();
+        showToast('Subscription cancelled. You will retain access until the end of your billing period.', 'success');
+        loadSubscription();
+      } catch (error) {
+        showToast('Failed to cancel subscription: ' + error.message, 'error');
+      }
+    }
+
+    // Load subscription on page load
+    firebase.auth().onAuthStateChanged(async (user) => {
+      if (user) {
+        loadSubscription();
+      }
+    });
+
+    // Handle URL hash for direct navigation to billing
+    if (window.location.hash === '#billing') {
+      document.querySelectorAll('.settings-nav-item').forEach(i => i.classList.remove('active'));
+      document.querySelector('[data-section="billing"]').classList.add('active');
+      document.querySelectorAll('.settings-section').forEach(s => s.classList.add('hidden'));
+      document.getElementById('billingSection').classList.remove('hidden');
+    }
   </script>
 </body>
 </html>

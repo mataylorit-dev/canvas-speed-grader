@@ -655,6 +655,7 @@ def create_checkout():
     try:
         data = request.get_json()
         price_id = data.get('priceId')
+        quantity = data.get('quantity', 1)
 
         if not price_id:
             return jsonify({'error': 'Price ID is required'}), 400
@@ -663,8 +664,9 @@ def create_checkout():
         checkout_url = payment_service.create_checkout_session(
             user_id=request.user_id,
             price_id=price_id,
-            success_url=f"{request.host_url}dashboard?payment=success",
-            cancel_url=f"{request.host_url}dashboard?payment=cancelled"
+            success_url=f"{request.host_url}settings.html?section=billing&payment=success",
+            cancel_url=f"{request.host_url}settings.html?section=billing&payment=cancelled",
+            quantity=int(quantity)
         )
 
         return jsonify({'checkoutUrl': checkout_url})
