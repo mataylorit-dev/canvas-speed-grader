@@ -363,19 +363,42 @@
 
     // Load assignments
     async function loadAssignments() {
+      const select = document.getElementById('assignmentSelect');
+      select.innerHTML = '<option value="">Loading assignments...</option>';
+
       try {
         const response = await API.getAssignments();
-        const select = document.getElementById('assignmentSelect');
 
         if (response.assignments && response.assignments.length > 0) {
           select.innerHTML = '<option value="">Select an assignment...</option>' +
             response.assignments.map(a => `<option value="${a.id}">${a.name} (${a.submission_count} submissions)</option>`).join('');
         } else {
           select.innerHTML = '<option value="">No assignments with rubrics found</option>';
+          showToast('No assignments with rubrics found in your course. Make sure your assignments have rubrics attached in Canvas.', 'warning');
         }
       } catch (error) {
         console.error('Failed to load assignments:', error);
-        showToast('Failed to load assignments', 'error');
+        select.innerHTML = '<option value="">Failed to load - check settings</option>';
+
+        // Check if it's a credentials issue
+        if (error.message && (error.message.includes('canvas') || error.message.includes('course') || error.message.includes('token') || error.message.includes('Not authenticated'))) {
+          showToast('Please configure your Canvas credentials in Settings first.', 'error');
+          // Show link to settings
+          document.getElementById('assignmentSelector').innerHTML = `
+            <div class="card-body text-center py-8">
+              <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 24px; color: var(--color-warning);">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              <h3 style="color: var(--text-primary); margin-bottom: 12px;">Canvas Setup Required</h3>
+              <p style="color: var(--text-secondary); margin-bottom: 24px;">Please configure your Canvas URL, API token, and select a course before grading.</p>
+              <a href="settings.html" class="btn btn-primary">Go to Settings</a>
+            </div>
+          `;
+        } else {
+          showToast('Failed to load assignments: ' + error.message, 'error');
+        }
       }
     }
 
