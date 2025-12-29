@@ -890,8 +890,8 @@ ol {
   left: 0;
   width: 280px;
   height: 100vh;
-  background-color: var(--bg-primary);
-  border-right: 1px solid var(--color-gray-100);
+  background: linear-gradient(180deg, #1e1b4b 0%, #0f172a 100%) !important;
+  border-right: 1px solid rgba(129, 140, 248, 0.2) !important;
   display: flex;
   flex-direction: column;
   z-index: var(--z-fixed);
@@ -900,7 +900,7 @@ ol {
 
 .sidebar-header {
   padding: var(--space-6);
-  border-bottom: 1px solid var(--color-gray-100);
+  border-bottom: 1px solid rgba(129, 140, 248, 0.2) !important;
 }
 
 .sidebar-nav {
@@ -916,7 +916,7 @@ ol {
 .sidebar-section-title {
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
-  color: var(--text-muted);
+  color: #a5b4fc !important;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   padding: var(--space-2) var(--space-3);
@@ -929,30 +929,84 @@ ol {
   padding: var(--space-3);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
-  color: var(--text-secondary);
+  color: #e0e7ff !important;
   border-radius: var(--radius-lg);
   transition: all var(--transition-fast);
 }
 
 .sidebar-link:hover {
-  color: var(--text-primary);
-  background-color: var(--color-gray-100);
+  color: #ffffff !important;
+  background-color: rgba(129, 140, 248, 0.15) !important;
 }
 
 .sidebar-link.active {
-  color: var(--color-primary);
-  background-color: var(--color-primary-50);
+  color: #ffffff !important;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.4) 0%, rgba(139, 92, 246, 0.3) 100%) !important;
+  border-left: 3px solid #818cf8;
 }
 
 .sidebar-link svg {
   width: 20px;
   height: 20px;
   flex-shrink: 0;
+  color: inherit !important;
 }
 
 .sidebar-footer {
   padding: var(--space-4);
-  border-top: 1px solid var(--color-gray-100);
+  border-top: 1px solid rgba(129, 140, 248, 0.2) !important;
+}
+
+.sidebar-footer button,
+.sidebar-footer .sidebar-user-btn {
+  color: #e0e7ff !important;
+}
+
+.sidebar-footer button:hover,
+.sidebar-footer .sidebar-user-btn:hover {
+  background: rgba(129, 140, 248, 0.15) !important;
+  color: #ffffff !important;
+}
+
+.sidebar-footer .avatar {
+  background-color: rgba(129, 140, 248, 0.3) !important;
+  color: #ffffff !important;
+}
+
+/* Force dark sidebar on all theme settings */
+[data-theme="light"] .sidebar,
+[data-theme="dark"] .sidebar {
+  background: linear-gradient(180deg, #1e1b4b 0%, #0f172a 100%) !important;
+  border-right: 1px solid rgba(129, 140, 248, 0.2) !important;
+}
+
+[data-theme="light"] .sidebar-link,
+[data-theme="dark"] .sidebar-link {
+  color: #e0e7ff !important;
+}
+
+[data-theme="light"] .sidebar-link:hover,
+[data-theme="dark"] .sidebar-link:hover {
+  color: #ffffff !important;
+  background-color: rgba(129, 140, 248, 0.15) !important;
+}
+
+[data-theme="light"] .sidebar-link.active,
+[data-theme="dark"] .sidebar-link.active {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.4) 0%, rgba(139, 92, 246, 0.3) 100%) !important;
+}
+
+[data-theme="light"] .sidebar-section-title,
+[data-theme="dark"] .sidebar-section-title {
+  color: #a5b4fc !important;
+}
+
+[data-theme="light"] .sidebar-footer button,
+[data-theme="light"] .sidebar-footer .sidebar-user-btn,
+[data-theme="dark"] .sidebar-footer button,
+[data-theme="dark"] .sidebar-footer .sidebar-user-btn {
+  color: #e0e7ff !important;
 }
 
 /* Content with sidebar */

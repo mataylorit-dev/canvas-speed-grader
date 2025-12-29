@@ -167,26 +167,16 @@ const App = {
 
   /**
    * Setup theme (dark/light mode)
+   * Note: Theme is primarily handled by theme.js - this is just for the toggle button
    */
   setupTheme() {
-    // Check for saved theme preference
-    const savedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-    if (savedTheme) {
-      document.documentElement.setAttribute('data-theme', savedTheme);
-    } else if (prefersDark) {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    }
-
-    // Listen for theme toggle
+    // Listen for theme toggle button (if present)
     const themeToggle = document.getElementById('themeToggle');
     if (themeToggle) {
       themeToggle.addEventListener('click', () => {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
+        if (window.Theme) {
+          window.Theme.toggle();
+        }
       });
     }
   },
@@ -407,9 +397,9 @@ style.textContent = `
     top: 100%;
     left: 0;
     right: 0;
-    background: var(--bg-primary);
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%) !important;
     padding: var(--space-4);
-    box-shadow: var(--shadow-lg);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
   }
 `;
 document.head.appendChild(style);
