@@ -32,6 +32,23 @@ db.enablePersistence()
     }
   });
 
+// Handle redirect result (catches the "missing initial state" error)
+firebase.auth().getRedirectResult()
+  .then((result) => {
+    // Redirect sign-in successful (if any)
+    if (result.user) {
+      console.log('Redirect sign-in successful');
+    }
+  })
+  .catch((error) => {
+    // Ignore the "missing initial state" error - it's not critical
+    if (error.message && error.message.includes('missing initial state')) {
+      console.warn('Firebase auth redirect state warning (safe to ignore):', error.message);
+    } else if (error.code !== 'auth/popup-closed-by-user') {
+      console.error('Firebase auth error:', error);
+    }
+  });
+
 // Export for use in other modules
 window.firebaseConfig = firebaseConfig;
 window.db = db;
