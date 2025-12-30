@@ -5,13 +5,12 @@
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyC_pplhocY_qEjndq2u66KaQPvOOf494-o",
-  authDomain: "speedgrade-96232.firebaseapp.com",
-  projectId: "speedgrade-96232",
-  storageBucket: "speedgrade-96232.firebasestorage.app",
-  messagingSenderId: "891137567722",
-  appId: "1:891137567722:web:b8db192a9a7d948e35a093",
-  measurementId: "G-RQXDTH6R18"
+  apiKey: "AIzaSyA_bqTtyDgy7Mz0uk7ajFd1BT4zvgJwjpE",
+  authDomain: "classcrew-app.firebaseapp.com",
+  projectId: "classcrew-app",
+  storageBucket: "classcrew-app.firebasestorage.app",
+  messagingSenderId: "492504311516",
+  appId: "1:492504311516:web:423417927897a1a500b619"
 };
 
 // Initialize Firebase
