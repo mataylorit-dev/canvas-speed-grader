@@ -1451,32 +1451,53 @@
   padding: 0 var(--space-8) var(--space-8);
 }
 
-/* Ensure form inputs are visible in auth cards */
-.auth-card .form-input {
-  background-color: #ffffff;
-  border: 1px solid var(--color-gray-300);
-  color: var(--text-primary);
+/* Ensure form inputs are visible in auth cards - STRONG OVERRIDE */
+.auth-card .form-input,
+.auth-card input[type="text"],
+.auth-card input[type="email"],
+.auth-card input[type="password"],
+.auth-card input[type="url"],
+.auth-card textarea,
+.auth-card select {
+  background-color: #ffffff !important;
+  border: 2px solid #d1d5db !important;
+  color: #1f2937 !important;
+  -webkit-text-fill-color: #1f2937 !important;
 }
 
-.auth-card .form-input:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgb(79 70 229 / 0.1);
+.auth-card .form-input:focus,
+.auth-card input[type="text"]:focus,
+.auth-card input[type="email"]:focus,
+.auth-card input[type="password"]:focus,
+.auth-card input[type="url"]:focus,
+.auth-card textarea:focus,
+.auth-card select:focus {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 3px rgb(79 70 229 / 0.1) !important;
+  outline: none !important;
 }
 
-.auth-card .form-input::placeholder {
-  color: var(--text-muted);
+.auth-card .form-input::placeholder,
+.auth-card input::placeholder,
+.auth-card textarea::placeholder {
+  color: #9ca3af !important;
+  -webkit-text-fill-color: #9ca3af !important;
 }
 
 .auth-card .form-label {
-  color: var(--text-primary);
+  color: #1f2937 !important;
 }
 
 .auth-card .form-checkbox-label {
-  color: var(--text-secondary);
+  color: #4b5563 !important;
 }
 
 .auth-card .input-group-icon {
-  color: var(--text-muted);
+  color: #9ca3af !important;
+}
+
+.auth-card .input-group-icon svg {
+  color: #9ca3af !important;
 }
 
 .auth-footer {

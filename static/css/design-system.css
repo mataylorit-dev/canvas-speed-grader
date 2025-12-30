@@ -763,19 +763,19 @@ ol {
 /* --------------------------------------------------------------------------
    Navigation
    -------------------------------------------------------------------------- */
-.navbar {
+/* Navbar - ALWAYS dark purple gradient regardless of theme */
+html body .navbar,
+.navbar,
+[data-theme] .navbar,
+[data-theme="light"] .navbar,
+[data-theme="dark"] .navbar,
+[data-theme="system"] .navbar {
   position: sticky;
   top: 0;
   z-index: var(--z-sticky);
   background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%) !important;
+  background-color: #1e1b4b !important;
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(129, 140, 248, 0.2) !important;
-}
-
-/* Force dark navbar on all theme settings */
-[data-theme="light"] .navbar,
-[data-theme="dark"] .navbar {
-  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%) !important;
   border-bottom: 1px solid rgba(129, 140, 248, 0.2) !important;
 }
 

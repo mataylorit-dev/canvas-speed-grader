@@ -227,6 +227,28 @@ const API = {
     });
   },
 
+  // =========================================================================
+  // Roster API Methods
+  // =========================================================================
+
+  /**
+   * Get class roster
+   */
+  async getRoster() {
+    return this.request('/roster');
+  },
+
+  /**
+   * Get student grades
+   */
+  async getStudentGrades(studentId) {
+    return this.request(`/roster/${studentId}/grades`);
+  },
+
+  // =========================================================================
+  // Billing API Methods
+  // =========================================================================
+
   /**
    * Get subscription status
    */
@@ -237,10 +259,10 @@ const API = {
   /**
    * Create checkout session
    */
-  async createCheckoutSession(priceId) {
+  async createCheckoutSession(priceId, options = {}) {
     return this.request('/billing/checkout', {
       method: 'POST',
-      body: JSON.stringify({ priceId })
+      body: JSON.stringify({ priceId, quantity: options.quantity || 1 })
     });
   },
 

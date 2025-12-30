@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Class Roster - ClassCrew">
+  <title>Class Roster - ClassCrew</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="./css/design-system.css">
+  <link rel="stylesheet" href="./css/main.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="./images/favicon.svg">
+
+  <style>
+    .roster-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .roster-table th,
+    .roster-table td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-primary);
+    }
+    .roster-table th {
+      font-weight: 600;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .roster-table tbody tr:hover {
+      background-color: var(--bg-secondary);
+    }
+    .student-row {
+      cursor: pointer;
+    }
+    .student-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+    .student-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .student-name {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    .student-email {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .grade-cell {
+      font-weight: 600;
+    }
+    .grade-good {
+      color: var(--color-success);
+    }
+    .grade-warning {
+      color: var(--color-warning);
+    }
+    .grade-danger {
+      color: var(--color-error);
+    }
+    .trend-up {
+      color: var(--color-success);
+    }
+    .trend-down {
+      color: var(--color-error);
+    }
+    .trend-steady {
+      color: var(--text-muted);
+    }
+    .missing-badge {
+      background: var(--color-error-bg);
+      color: var(--color-error);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    .search-box {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .search-input {
+      flex: 1;
+      max-width: 300px;
+    }
+    .student-detail-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+    .student-detail-modal.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .student-detail-content {
+      background: var(--bg-primary);
+      border-radius: 12px;
+      width: 90%;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-xl);
+    }
+    .student-detail-header {
+      padding: 24px;
+      border-bottom: 1px solid var(--border-primary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .student-detail-body {
+      padding: 24px;
+    }
+    .grade-list {
+      margin-top: 16px;
+    }
+    .grade-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-secondary);
+    }
+    .grade-item:last-child {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar" style="background: linear-gradient(180deg, #1e1b4b 0%, #0f172a 100%) !important;">
+      <div class="sidebar-header" style="border-bottom-color: rgba(129, 140, 248, 0.2) !important;">
+        <a href="dashboard.html" class="navbar-brand" style="color: #ffffff !important;">
+          <div class="navbar-brand-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"></path>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            </svg>
+          </div>
+          <span>ClassCrew</span>
+        </a>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Main</div>
+          <a href="dashboard.html" class="sidebar-link sidebar-link-animate">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            Dashboard
+          </a>
+          <a href="grading.html" class="sidebar-link sidebar-link-animate">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"></path>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            </svg>
+            Grade Assignments
+          </a>
+          <a href="roster.html" class="sidebar-link active">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            Class Roster
+          </a>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Settings</div>
+          <a href="settings.html" class="sidebar-link sidebar-link-animate">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+            Settings
+          </a>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="dropdown" id="userDropdown">
+          <button class="sidebar-user-btn" onclick="toggleDropdown()">
+            <div class="avatar" id="userAvatar">T</div>
+            <div class="flex-1 text-left">
+              <div class="text-sm font-medium" id="userName">Teacher Name</div>
+              <div class="text-xs text-muted" id="userEmail">teacher@school.edu</div>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="dropdown-menu">
+            <a href="settings.html" class="dropdown-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              Account Settings
+            </a>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" onclick="signOut()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+              </svg>
+              Sign Out
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-with-sidebar page-animate-in">
+      <!-- Top Bar -->
+      <div class="page-header">
+        <div class="container">
+          <div class="page-header-content">
+            <div>
+              <h1 class="page-title">Class Roster</h1>
+              <p class="page-description" id="courseInfo">Loading students...</p>
+            </div>
+            <button class="btn btn-secondary btn-animate" onclick="refreshRoster()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 4 23 10 17 10"></polyline>
+                <polyline points="1 20 1 14 7 14"></polyline>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+              </svg>
+              Refresh
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <div class="container">
+          <!-- Search and Filter -->
+          <div class="search-box">
+            <input type="text" id="searchInput" class="form-input search-input" placeholder="Search students..." oninput="filterStudents()">
+            <select id="filterSelect" class="form-input" style="width: auto;" onchange="filterStudents()">
+              <option value="all">All Students</option>
+              <option value="at-risk">At Risk</option>
+              <option value="missing">Missing Assignments</option>
+            </select>
+          </div>
+
+          <!-- Roster Table -->
+          <div class="card">
+            <div class="card-body p-0">
+              <table class="roster-table">
+                <thead>
+                  <tr>
+                    <th>Student</th>
+                    <th>Current Grade</th>
+                    <th>Trend</th>
+                    <th>Missing</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="rosterBody">
+                  <tr>
+                    <td colspan="5" class="text-center py-8">
+                      <div class="spinner mx-auto mb-4"></div>
+                      <p class="text-muted">Loading roster...</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Student Detail Modal -->
+  <div class="student-detail-modal" id="studentModal">
+    <div class="student-detail-content">
+      <div class="student-detail-header">
+        <div>
+          <h3 id="modalStudentName">Student Name</h3>
+          <p class="text-muted text-sm" id="modalStudentEmail">student@email.com</p>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="closeStudentModal()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="student-detail-body">
+        <div class="grid grid-cols-3 gap-4 mb-6">
+          <div class="stat-card">
+            <div class="stat-card-value" id="modalCurrentGrade">--</div>
+            <div class="stat-card-label">Current Grade</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-value" id="modalMissing">0</div>
+            <div class="stat-card-label">Missing</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-value" id="modalTrend">--</div>
+            <div class="stat-card-label">Trend</div>
+          </div>
+        </div>
+
+        <h4 class="font-semibold mb-2">Assignment Grades</h4>
+        <div class="grade-list" id="gradeList">
+          <p class="text-muted text-center py-4">Loading grades...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+  <!-- App Scripts -->
+  <script src="./js/firebase-config.js"></script>
+  <script src="./js/theme.js"></script>
+  <script src="./js/auth.js"></script>
+  <script src="./js/api.js"></script>
+  <script src="./js/app.js"></script>
+
+  <script>
+    let students = [];
+    let currentStudent = null;
+
+    // Check authentication
+    firebase.auth().onAuthStateChanged(async (user) => {
+      if (!user) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      // Update user info in sidebar
+      document.getElementById('userName').textContent = user.displayName || 'Teacher';
+      document.getElementById('userEmail').textContent = user.email;
+      document.getElementById('userAvatar').textContent = (user.displayName || user.email)[0].toUpperCase();
+
+      // Load roster
+      loadRoster();
+    });
+
+    // Load roster from API
+    async function loadRoster() {
+      try {
+        const response = await API.getRoster();
+        students = response.students || [];
+
+        document.getElementById('courseInfo').textContent =
+          `${students.length} students in ${response.course?.name || 'your course'}`;
+
+        renderRoster(students);
+      } catch (error) {
+        console.error('Failed to load roster:', error);
+        document.getElementById('rosterBody').innerHTML = `
+          <tr>
+            <td colspan="5" class="text-center py-8">
+              <p class="text-muted">Failed to load roster. Please check your Canvas settings.</p>
+              <a href="settings.html" class="btn btn-primary btn-sm mt-4">Go to Settings</a>
+            </td>
+          </tr>
+        `;
+      }
+    }
+
+    // Render roster table
+    function renderRoster(studentsToRender) {
+      const tbody = document.getElementById('rosterBody');
+
+      if (studentsToRender.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5" class="text-center py-8">
+              <p class="text-muted">No students found.</p>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = studentsToRender.map(student => {
+        const grade = student.current_score || student.current_grade || '--';
+        const gradeClass = getGradeClass(student.current_score);
+        const trendClass = student.trend === 'up' ? 'trend-up' : student.trend === 'down' ? 'trend-down' : 'trend-steady';
+        const trendIcon = student.trend === 'up' ? '&uarr;' : student.trend === 'down' ? '&darr;' : '&ndash;';
+
+        return `
+          <tr class="student-row" onclick="showStudentDetail('${student.id}')">
+            <td>
+              <div class="student-info">
+                <div class="student-avatar">${student.name ? student.name[0].toUpperCase() : 'S'}</div>
+                <div>
+                  <div class="student-name">${student.name || 'Unknown'}</div>
+                  <div class="student-email">${student.email || ''}</div>
+                </div>
+              </div>
+            </td>
+            <td class="grade-cell ${gradeClass}">${grade}${typeof grade === 'number' ? '%' : ''}</td>
+            <td class="${trendClass}">${trendIcon} ${student.trend || 'Steady'}</td>
+            <td>${student.missing_assignments > 0 ? `<span class="missing-badge">${student.missing_assignments} missing</span>` : '0'}</td>
+            <td><span class="badge badge-${student.enrollment_state === 'active' ? 'success' : 'secondary'}">${student.enrollment_state || 'Active'}</span></td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // Get grade color class
+    function getGradeClass(score) {
+      if (score === null || score === undefined) return '';
+      if (score >= 80) return 'grade-good';
+      if (score >= 60) return 'grade-warning';
+      return 'grade-danger';
+    }
+
+    // Filter students
+    function filterStudents() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const filter = document.getElementById('filterSelect').value;
+
+      let filtered = students.filter(s => {
+        const matchesSearch = s.name?.toLowerCase().includes(search) ||
+                              s.email?.toLowerCase().includes(search);
+
+        if (!matchesSearch) return false;
+
+        if (filter === 'at-risk') {
+          return (s.current_score && s.current_score < 70) || s.trend === 'down';
+        }
+        if (filter === 'missing') {
+          return s.missing_assignments > 0;
+        }
+        return true;
+      });
+
+      renderRoster(filtered);
+    }
+
+    // Show student detail modal
+    async function showStudentDetail(studentId) {
+      currentStudent = students.find(s => s.id === studentId);
+      if (!currentStudent) return;
+
+      document.getElementById('modalStudentName').textContent = currentStudent.name;
+      document.getElementById('modalStudentEmail').textContent = currentStudent.email || '';
+      document.getElementById('modalCurrentGrade').textContent =
+        (currentStudent.current_score ? currentStudent.current_score + '%' : currentStudent.current_grade || '--');
+      document.getElementById('modalMissing').textContent = currentStudent.missing_assignments || 0;
+      document.getElementById('modalTrend').textContent = currentStudent.trend || 'Steady';
+
+      document.getElementById('studentModal').classList.add('active');
+
+      // Load detailed grades
+      try {
+        const response = await API.getStudentGrades(studentId);
+        renderGradeList(response.grades || []);
+      } catch (error) {
+        document.getElementById('gradeList').innerHTML =
+          '<p class="text-muted text-center py-4">Failed to load grades.</p>';
+      }
+    }
+
+    // Render grade list in modal
+    function renderGradeList(grades) {
+      const container = document.getElementById('gradeList');
+
+      if (grades.length === 0) {
+        container.innerHTML = '<p class="text-muted text-center py-4">No assignments graded yet.</p>';
+        return;
+      }
+
+      container.innerHTML = grades.map(g => `
+        <div class="grade-item">
+          <div>
+            <div class="font-medium">${g.assignment_name}</div>
+            <div class="text-sm text-muted">
+              ${g.missing ? 'Missing' : g.late ? 'Late' : 'On time'}
+            </div>
+          </div>
+          <div class="grade-cell ${getGradeClass(g.score !== null ? (g.score / g.points_possible * 100) : null)}">
+            ${g.score !== null ? `${g.score}/${g.points_possible}` : '--'}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Close student modal
+    function closeStudentModal() {
+      document.getElementById('studentModal').classList.remove('active');
+      currentStudent = null;
+    }
+
+    // Refresh roster
+    function refreshRoster() {
+      document.getElementById('rosterBody').innerHTML = `
+        <tr>
+          <td colspan="5" class="text-center py-8">
+            <div class="spinner mx-auto mb-4"></div>
+            <p class="text-muted">Loading roster...</p>
+          </td>
+        </tr>
+      `;
+      loadRoster();
+    }
+
+    // Toggle user dropdown
+    function toggleDropdown() {
+      document.getElementById('userDropdown').classList.toggle('open');
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      const dropdown = document.getElementById('userDropdown');
+      if (!dropdown.contains(e.target)) {
+        dropdown.classList.remove('open');
+      }
+    });
+
+    // Close modal when clicking outside
+    document.getElementById('studentModal').addEventListener('click', (e) => {
+      if (e.target.id === 'studentModal') {
+        closeStudentModal();
+      }
+    });
+
+    // Sign out
+    async function signOut() {
+      await firebase.auth().signOut();
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>

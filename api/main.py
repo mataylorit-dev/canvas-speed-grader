@@ -460,6 +460,62 @@ def get_grading_history():
 
 
 # =============================================================================
+# Roster Routes
+# =============================================================================
+
+@app.route('/api/roster', methods=['GET'])
+@require_auth
+def get_roster():
+    """Get class roster with grades"""
+    try:
+        user_data = get_user_data(request.user_id)
+        if not user_data:
+            return jsonify({'error': 'User not found'}), 404
+
+        canvas_service = CanvasService(
+            user_data['canvas_url'],
+            user_data['canvas_token'],
+            user_data['course_id']
+        )
+
+        students = canvas_service.get_roster()
+
+        return jsonify({
+            'students': students,
+            'course': {
+                'id': user_data['course_id'],
+                'name': canvas_service.get_course_name()
+            }
+        })
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/roster/<student_id>/grades', methods=['GET'])
+@require_auth
+def get_student_grades(student_id):
+    """Get detailed grades for a specific student"""
+    try:
+        user_data = get_user_data(request.user_id)
+        if not user_data:
+            return jsonify({'error': 'User not found'}), 404
+
+        canvas_service = CanvasService(
+            user_data['canvas_url'],
+            user_data['canvas_token'],
+            user_data['course_id']
+        )
+
+        grades = canvas_service.get_student_grades(student_id)
+
+        return jsonify({'grades': grades})
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+# =============================================================================
 # User Routes
 # =============================================================================
 

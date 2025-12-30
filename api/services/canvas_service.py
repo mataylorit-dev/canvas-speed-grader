@@ -69,8 +69,13 @@ class CanvasService:
             return self.course.name
         return "Unknown Course"
 
-    def get_assignments_with_rubrics(self) -> List[Dict]:
-        """Get all assignments that have rubrics attached"""
+    def get_assignments_with_rubrics(self, include_all: bool = True) -> List[Dict]:
+        """
+        Get all assignments, optionally filtered to only those with rubrics
+
+        Args:
+            include_all: If True, return all assignments. If False, only return rubric-based.
+        """
         if not self.course:
             raise ValueError("No course selected")
 
@@ -79,16 +84,22 @@ class CanvasService:
             for assignment in self.course.get_assignments():
                 # Check if assignment has a rubric
                 rubric = self._get_assignment_rubric(assignment)
-                if rubric:
-                    assignments.append({
-                        'id': str(assignment.id),
-                        'name': assignment.name,
-                        'description': getattr(assignment, 'description', ''),
-                        'due_at': getattr(assignment, 'due_at', None),
-                        'points_possible': getattr(assignment, 'points_possible', 0),
-                        'has_rubric': True,
-                        'submission_types': getattr(assignment, 'submission_types', [])
-                    })
+                has_rubric = rubric is not None
+
+                # Skip if we only want rubric-based and this doesn't have one
+                if not include_all and not has_rubric:
+                    continue
+
+                assignments.append({
+                    'id': str(assignment.id),
+                    'name': assignment.name,
+                    'description': getattr(assignment, 'description', ''),
+                    'due_at': getattr(assignment, 'due_at', None),
+                    'points_possible': getattr(assignment, 'points_possible', 0),
+                    'has_rubric': has_rubric,
+                    'ai_grading_available': True,  # AI grading available for all assignments
+                    'submission_types': getattr(assignment, 'submission_types', [])
+                })
         except Exception as e:
             raise ValueError(f"Failed to fetch assignments: {str(e)}")
 
@@ -310,6 +321,80 @@ class CanvasService:
                         shutil.rmtree(parent_dir)
             except Exception:
                 pass
+
+    def get_roster(self) -> List[Dict]:
+        """Get student roster with grades and enrollment info"""
+        if not self.course:
+            raise ValueError("No course selected")
+
+        try:
+            students = []
+            enrollments = self.course.get_enrollments(type=['StudentEnrollment'])
+
+            for enrollment in enrollments:
+                user = enrollment.user
+                user_id = str(user.get('id', ''))
+
+                # Get grades for this student
+                grades = enrollment.grades if hasattr(enrollment, 'grades') else {}
+
+                students.append({
+                    'id': user_id,
+                    'name': user.get('name', 'Unknown'),
+                    'sortable_name': user.get('sortable_name', ''),
+                    'email': user.get('email', ''),
+                    'avatar_url': user.get('avatar_url', ''),
+                    'enrollment_state': enrollment.enrollment_state,
+                    'current_score': grades.get('current_score'),
+                    'current_grade': grades.get('current_grade'),
+                    'final_score': grades.get('final_score'),
+                    'final_grade': grades.get('final_grade'),
+                    'missing_assignments': 0,  # Will be calculated
+                    'trend': 'steady'  # Will be calculated
+                })
+
+            return students
+        except Exception as e:
+            raise ValueError(f"Failed to fetch roster: {str(e)}")
+
+    def get_student_grades(self, student_id: str) -> List[Dict]:
+        """Get all assignment grades for a specific student"""
+        if not self.course:
+            raise ValueError("No course selected")
+
+        try:
+            grades = []
+            assignments = self.course.get_assignments()
+
+            for assignment in assignments:
+                try:
+                    submission = assignment.get_submission(student_id)
+                    grades.append({
+                        'assignment_id': str(assignment.id),
+                        'assignment_name': assignment.name,
+                        'points_possible': getattr(assignment, 'points_possible', 0),
+                        'score': getattr(submission, 'score', None),
+                        'grade': getattr(submission, 'grade', None),
+                        'submitted_at': getattr(submission, 'submitted_at', None),
+                        'late': getattr(submission, 'late', False),
+                        'missing': getattr(submission, 'missing', False)
+                    })
+                except Exception:
+                    # Student may not have submission for this assignment
+                    grades.append({
+                        'assignment_id': str(assignment.id),
+                        'assignment_name': assignment.name,
+                        'points_possible': getattr(assignment, 'points_possible', 0),
+                        'score': None,
+                        'grade': None,
+                        'submitted_at': None,
+                        'late': False,
+                        'missing': True
+                    })
+
+            return grades
+        except Exception as e:
+            raise ValueError(f"Failed to fetch student grades: {str(e)}")
 
     def post_grade(self, assignment_id: str, submission_id: str, score: float,
                    comment: str = '', rubric_scores: Dict = None) -> bool:
